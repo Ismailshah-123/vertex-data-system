@@ -1,0 +1,150 @@
+@import "tailwindcss";
+
+/* ─── Base ──────────────────────────────────────────────────────────────────── */
+@layer base {
+  *, *::before, *::after { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    @apply bg-[#0a0c0b] text-[#f0f5f3];
+    font-family: var(--font-body), 'Manrope', system-ui, -apple-system, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+  }
+
+  h1, h2, h3 {
+    font-family: var(--font-display), 'Archivo', system-ui, -apple-system, sans-serif;
+  }
+
+  ::selection {
+    background: #00e5b4;
+    color: #000;
+  }
+}
+
+/* ─── Animations ────────────────────────────────────────────────────────────── */
+@layer utilities {
+  /* Ticker marquee */
+  @keyframes ticker {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+  }
+  .animate-ticker { animation: ticker 30s linear infinite; }
+
+  /* Fade + slide up (used on service panel swap) */
+  @keyframes fadeSlide {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .animate-fade-slide { animation: fadeSlide 0.35s ease forwards; }
+
+  /* Glitch frames */
+  @keyframes glitch {
+    0%   { clip-path: polygon(0 5%,  100% 5%,  100% 10%, 0 10%); transform: translate(-4px, 0); }
+    20%  { clip-path: polygon(0 50%, 100% 50%, 100% 55%, 0 55%); transform: translate(4px, 0); }
+    40%  { clip-path: polygon(0 80%, 100% 80%, 100% 90%, 0 90%); transform: translate(-2px, 0); }
+    60%  { clip-path: polygon(0 25%, 100% 25%, 100% 30%, 0 30%); transform: translate(2px, 0); }
+    80%  { clip-path: polygon(0 65%, 100% 65%, 100% 70%, 0 70%); transform: translate(-3px, 0); }
+    100% { clip-path: none; transform: translate(0, 0); }
+  }
+
+  /* Pulse glow for logo */
+  @keyframes logoPulse {
+    0%, 100% { filter: drop-shadow(0 0 6px #00e5b4); }
+    50%       { filter: drop-shadow(0 0 20px #00e5b4); }
+  }
+  .animate-logo-pulse { animation: logoPulse 3s ease-in-out infinite; }
+
+  /* Border beam sweep */
+  @keyframes borderBeam {
+    from { --border-angle: 0turn; }
+    to   { --border-angle: 1turn; }
+  }
+
+  /* Floating */
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50%       { transform: translateY(-12px); }
+  }
+  .animate-float { animation: float 6s ease-in-out infinite; }
+
+  /* Scan line */
+  @keyframes scanline {
+    0%   { transform: translateY(-100%); }
+    100% { transform: translateY(100vh); }
+  }
+
+  /* Number counter spin (optional enhancement) */
+  @keyframes countUp {
+    from { transform: translateY(100%); opacity: 0; }
+    to   { transform: translateY(0);    opacity: 1; }
+  }
+}
+
+/* ─── Scrollbar ─────────────────────────────────────────────────────────────── */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: #0a0c0b; }
+::-webkit-scrollbar-thumb { background: #1e2b28; border-radius: 2px; }
+::-webkit-scrollbar-thumb:hover { background: #00e5b4; }
+
+/* ─── Noise overlay ─────────────────────────────────────────────────────────── */
+.noise-overlay {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.025;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 256px 256px;
+}
+
+/* ─── Grid backgrounds ──────────────────────────────────────────────────────── */
+.bg-grid {
+  background-image:
+    linear-gradient(rgba(0,229,180,0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,229,180,0.025) 1px, transparent 1px);
+  background-size: 64px 64px;
+}
+
+.bg-grid-sm {
+  background-image:
+    linear-gradient(rgba(0,229,180,0.015) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,229,180,0.015) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+/* ─── Teal glow utilities ───────────────────────────────────────────────────── */
+.glow-teal-sm  { box-shadow: 0 0 20px rgba(0,229,180,0.2); }
+.glow-teal-md  { box-shadow: 0 0 40px rgba(0,229,180,0.3); }
+.glow-teal-lg  { box-shadow: 0 0 80px rgba(0,229,180,0.4); }
+
+.text-glow-teal { text-shadow: 0 0 40px rgba(0,229,180,0.5); }
+
+/* ─── Featured pricing card gradient border ─────────────────────────────────── */
+.gradient-border {
+  position: relative;
+}
+.gradient-border::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  padding: 1px;
+  background: linear-gradient(135deg, #00e5b4, transparent 60%);
+  border-radius: inherit;
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+/* ─── Reduce motion ─────────────────────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
