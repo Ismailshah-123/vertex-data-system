@@ -12,6 +12,8 @@ export default function NotFound() {
 
     let gi: ReturnType<typeof setInterval> | undefined;
     let si: ReturnType<typeof setInterval> | undefined;
+    let scrambleTimer: ReturnType<typeof setInterval> | undefined;
+    const clearAll = () => { if (gi) clearInterval(gi); if (si) clearInterval(si); if (scrambleTimer) clearInterval(scrambleTimer); };
 
     if (!prefersReducedMotion) {
       // Glitch loop
@@ -24,19 +26,19 @@ export default function NotFound() {
       const letters = "0123456789ABCDEF!@#$%";
       si = setInterval(() => {
         let i = 0;
-        const t = setInterval(() => {
+        scrambleTimer = setInterval(() => {
           setChars(Array.from("404").map((c, j) => j <= i ? c : letters[Math.floor(Math.random()*letters.length)]).join(""));
           i++;
-          if (i >= 3) { clearInterval(t); setChars("404"); }
+          if (i >= 3) { if (scrambleTimer) clearInterval(scrambleTimer); setChars("404"); }
         }, 60);
       }, 5000);
     }
 
     // Particle canvas — skipped entirely under reduced motion
     const canvas = canvasRef.current;
-    if (!canvas || prefersReducedMotion) return () => { if (gi) clearInterval(gi); if (si) clearInterval(si); };
+    if (!canvas || prefersReducedMotion) return clearAll;
     const ctx = canvas.getContext("2d");
-    if (!ctx) return () => { if (gi) clearInterval(gi); if (si) clearInterval(si); };
+    if (!ctx) return clearAll;
 
     let W = canvas.width = window.innerWidth;
     let H = canvas.height = window.innerHeight;
@@ -77,7 +79,7 @@ export default function NotFound() {
     draw();
 
     return () => {
-      if (gi) clearInterval(gi); if (si) clearInterval(si);
+      clearAll();
       cancelAnimationFrame(raf);
       window.removeEventListener("resize", resize);
     };

@@ -147,7 +147,7 @@ export default function Navbar() {
             aria-label={mobileOpen ? "Close menu" : "Open menu"}
             aria-expanded={mobileOpen}
             aria-controls="mobile-nav-menu"
-            className="lg:hidden flex flex-col gap-1.5 items-center justify-center w-8 h-8">
+            className="lg:hidden flex flex-col gap-1.5 items-center justify-center w-11 h-11 -mr-1.5">
             <span className={`block h-px w-6 bg-[#00e5b4] transition-all duration-300 ${mobileOpen ? "rotate-45 translate-y-2" : ""}`} />
             <span className={`block h-px w-6 bg-[#00e5b4] transition-all duration-300 ${mobileOpen ? "opacity-0" : ""}`} />
             <span className={`block h-px w-6 bg-[#00e5b4] transition-all duration-300 ${mobileOpen ? "-rotate-45 -translate-y-2" : ""}`} />

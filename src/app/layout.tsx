@@ -5,6 +5,7 @@ import Navbar          from "@/components/navbar/Navbar";
 import Footer          from "@/components/footer/Footer";
 import ParticleCanvas  from "@/components/particles/ParticleCanvas";
 import ScrollProgress  from "@/components/scroll-progress/ScrollProgress";
+import { safeJsonLd } from "@/lib/safeJsonLd";
 
 // Display font — used for all headings (h1/h2/h3). A confident grotesque
 // with real Black (900) weight support, distinct from the Inter/system-sans
@@ -78,7 +79,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
+            __html: safeJsonLd({
               "@context": "https://schema.org",
               "@type":    "Organization",
               name:        "VertexData Systems",

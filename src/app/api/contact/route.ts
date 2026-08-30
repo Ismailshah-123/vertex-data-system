@@ -95,6 +95,16 @@ export async function POST(req: NextRequest) {
     );
   }
 
+  // Reject oversized bodies before parsing — a legitimate submission from
+  // this form is at most a few KB. Checking Content-Length up front means
+  // an abusive multi-MB payload gets rejected immediately instead of being
+  // fully parsed into memory first.
+  const MAX_BODY_BYTES = 50_000; // 50KB — generous headroom over a real submission
+  const contentLength = Number(req.headers.get("content-length") || 0);
+  if (contentLength > MAX_BODY_BYTES) {
+    return NextResponse.json({ error: "Request too large." }, { status: 413 });
+  }
+
   let body: ContactPayload;
 
   try {
@@ -171,6 +181,9 @@ export async function POST(req: NextRequest) {
   }
 
   try {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 8000);
+
     const resendRes = await fetch("https://api.resend.com/emails", {
       method: "POST",
       headers: {
@@ -184,7 +197,9 @@ export async function POST(req: NextRequest) {
         subject: `New inquiry: ${company} — ${service}`,
         html: emailHtml,
       }),
+      signal: controller.signal,
     });
+    clearTimeout(timeout);
 
     if (!resendRes.ok) {
       const errText = await resendRes.text();
@@ -194,7 +209,8 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({ success: true, mode: "sent" });
   } catch (err) {
-    console.error("Contact form error:", err);
+    const timedOut = err instanceof Error && err.name === "AbortError";
+    console.error("Contact form error:", timedOut ? "Resend request timed out" : err);
     return NextResponse.json({ error: "Something went wrong. Please email us directly at hello@vertexdata.systems." }, { status: 500 });
   }
 }

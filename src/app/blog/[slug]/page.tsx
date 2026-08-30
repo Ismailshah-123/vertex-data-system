@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { POSTS } from "../posts";
+import { safeJsonLd } from "@/lib/safeJsonLd";
 
 /* ─────────────────────────────────────────────────────────────────────────
    /blog/[slug]
@@ -57,7 +58,7 @@ export default async function BlogPostPage(
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
+          __html: safeJsonLd({
             "@context": "https://schema.org",
             "@type": "BlogPosting",
             headline: post.title,

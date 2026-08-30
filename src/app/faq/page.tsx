@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import { safeJsonLd } from "@/lib/safeJsonLd";
 
 const FAQ_GROUPS = [
   {
@@ -99,7 +100,7 @@ export default function FAQPage() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
+          __html: safeJsonLd({
             "@context": "https://schema.org",
             "@type": "FAQPage",
             mainEntity: FAQ_GROUPS.flatMap((group) =>

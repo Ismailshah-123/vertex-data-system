@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { SERVICES } from "./data";
+import { safeJsonLd } from "@/lib/safeJsonLd";
 
 export function generateStaticParams() {
   return Object.keys(SERVICES).map((slug) => ({ slug }));
@@ -38,7 +39,7 @@ export default async function ServiceSlugLayout(
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
+            __html: safeJsonLd({
               "@context": "https://schema.org",
               "@type": "Service",
               name: service.title,
