@@ -75,7 +75,7 @@ export default function Navbar() {
 
           {/* Logo */}
           <Link href="/" className="flex items-center group">
-            <VertexLogo size={28} withWordmark className="group-hover:scale-105 transition-transform duration-300" />
+            <VertexLogo size={28} withWordmark priority className="group-hover:scale-105 transition-transform duration-300" />
           </Link>
 
           {/* Desktop */}

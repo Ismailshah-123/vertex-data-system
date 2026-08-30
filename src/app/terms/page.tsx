@@ -50,7 +50,7 @@ export default function TermsPage() {
   return (
     <main className="bg-[#0a0c0b] text-[#f0f5f3] min-h-screen">
       <section className="pt-36 pb-16 px-8">
-        <div className="max-w-screen-xl mx-auto max-w-3xl">
+        <div className="max-w-3xl mx-auto">
           <p className="text-[#00e5b4] text-xs tracking-[0.2em] uppercase mb-4 font-semibold">Legal</p>
           <h1 className="text-[clamp(2rem,4.5vw,3.5rem)] font-black tracking-tight leading-none mb-6">
             Terms of Service
@@ -66,7 +66,7 @@ export default function TermsPage() {
       </section>
 
       <section className="px-8 pb-28">
-        <div className="max-w-screen-xl mx-auto max-w-3xl space-y-10">
+        <div className="max-w-3xl mx-auto space-y-10">
           {SECTIONS.map(s => (
             <div key={s.title}>
               <h2 className="text-lg font-black tracking-tight mb-3">{s.title}</h2>

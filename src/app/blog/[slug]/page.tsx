@@ -54,6 +54,21 @@ export default async function BlogPostPage(
 
   return (
     <main className="bg-[#0a0c0b] text-[#f0f5f3] min-h-screen">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "BlogPosting",
+            headline: post.title,
+            description: post.excerpt,
+            datePublished: post.date,
+            author: { "@type": "Person", name: post.author.name },
+            publisher: { "@type": "Organization", name: "Vertex Data Systems" },
+            mainEntityOfPage: `https://vertexdata.systems/blog/${post.slug}`,
+          }),
+        }}
+      />
       <article className="max-w-2xl mx-auto px-8 pt-40 pb-28">
         <Link
           href="/blog"

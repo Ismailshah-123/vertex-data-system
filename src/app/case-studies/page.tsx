@@ -105,7 +105,7 @@ export default function CaseStudiesPage() {
     <main className="bg-[#0a0c0b] text-[#f0f5f3] min-h-screen">
       {/* ── HERO ──────────────────────────────────────────────────────── */}
       <section className="pt-36 pb-20 px-8">
-        <div className="max-w-screen-xl mx-auto max-w-3xl">
+        <div className="max-w-3xl mx-auto">
           <Reveal><p className="text-[#00e5b4] text-xs tracking-[0.2em] uppercase mb-4 font-semibold">Proof of Work</p></Reveal>
           <Reveal delay={80}>
             <h1 className="text-[clamp(2.2rem,5vw,4.5rem)] font-black tracking-tight leading-[1.02] mb-6">

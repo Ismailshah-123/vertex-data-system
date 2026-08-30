@@ -94,6 +94,24 @@ export default function FAQPage() {
 
   return (
     <main className="bg-[#0a0c0b] text-[#f0f5f3] overflow-x-hidden">
+      {/* FAQPage structured data — generated from FAQ_GROUPS above, so it can
+          never list a question/answer that isn't actually on this page. */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            mainEntity: FAQ_GROUPS.flatMap((group) =>
+              group.items.map((item) => ({
+                "@type": "Question",
+                name: item.q,
+                acceptedAnswer: { "@type": "Answer", text: item.a },
+              }))
+            ),
+          }),
+        }}
+      />
       {/* HERO */}
       <section className="relative min-h-[60vh] flex flex-col justify-center px-8 pt-32 pb-16 overflow-hidden">
         <div className="absolute inset-0 bg-[linear-gradient(rgba(0,229,180,0.025)_1px,transparent_1px),linear-gradient(90deg,rgba(0,229,180,0.025)_1px,transparent_1px)] bg-[size:64px_64px] [mask-image:radial-gradient(ellipse_60%_70%_at_30%_50%,black,transparent)]" />
