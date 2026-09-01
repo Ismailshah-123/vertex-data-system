@@ -144,6 +144,24 @@ export default function ContactPage() {
                 </div>
               ))}
             </div>
+
+            {/* Elsewhere */}
+            <div className="border border-[#1e2b28] rounded-2xl p-8">
+              <p className="text-[10px] tracking-[0.2em] uppercase text-[#3a5550] mb-6">Elsewhere</p>
+              <div className="flex flex-col gap-3">
+                {[
+                  { label: "LinkedIn", href: "https://www.linkedin.com/in/ismail-shah-57b425327/" },
+                  { label: "Upwork",   href: "https://www.upwork.com/freelancers/~01b4aafea43abec20a" },
+                  { label: "Fiverr",   href: "https://www.fiverr.com/users/isamil67" },
+                ].map(link => (
+                  <a key={link.label} href={link.href} target="_blank" rel="noopener noreferrer"
+                    className="flex items-center justify-between text-sm text-[#8aada8] hover:text-[#00e5b4] transition-colors duration-200 group">
+                    {link.label}
+                    <span className="text-[#3a5550] group-hover:text-[#00e5b4] group-hover:translate-x-0.5 transition-all duration-200">→</span>
+                  </a>
+                ))}
+              </div>
+            </div>
           </div>
 
           {/* RIGHT — multi-step form */}

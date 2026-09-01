@@ -4,6 +4,14 @@ import Link from "next/link";
 import { useReveal } from "@/hooks";
 import VertexLogo from "@/components/logo/VertexLogo";
 
+// Real, verified professional profiles — not the placeholder social
+// links that were removed earlier in this project's history.
+const PROFESSIONAL_LINKS = [
+  { label: "LinkedIn", href: "https://www.linkedin.com/in/ismail-shah-57b425327/" },
+  { label: "Upwork",   href: "https://www.upwork.com/freelancers/~01b4aafea43abec20a" },
+  { label: "Fiverr",   href: "https://www.fiverr.com/users/isamil67" },
+];
+
 const COLS = [
   {
     title: "Services",
@@ -96,6 +104,16 @@ export default function Footer() {
           <p className="text-sm text-[#3a5550] leading-relaxed max-w-[260px] mb-8">
             Enterprise AI and data intelligence, engineered the way I'd build it for my own systems — for organizations that need it to actually work in production, not just demo well.
           </p>
+
+          <div className="flex items-center gap-2 flex-wrap">
+            {PROFESSIONAL_LINKS.map(link => (
+              <a key={link.label} href={link.href} target="_blank" rel="noopener noreferrer"
+                className="text-xs font-medium px-3 py-1.5 rounded-lg border border-[#1e2b28] text-[#5a7570]
+                  hover:border-[#00e5b4] hover:text-[#00e5b4] transition-all duration-200">
+                {link.label}
+              </a>
+            ))}
+          </div>
         </div>
 
         {/* Link columns */}

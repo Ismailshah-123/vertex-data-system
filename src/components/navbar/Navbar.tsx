@@ -156,7 +156,7 @@ export default function Navbar() {
       </nav>
 
       {/* Mobile menu */}
-      <div id="mobile-nav-menu" className={`fixed inset-0 z-40 bg-[#0a0c0b] transition-all duration-500 flex flex-col pt-28 px-8
+      <div id="mobile-nav-menu" className={`fixed inset-0 z-[45] bg-[#0a0c0b] transition-all duration-500 flex flex-col pt-28 px-8
         ${mobileOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"}`}
         aria-hidden={!mobileOpen}>
         <div className="flex flex-col gap-1">
