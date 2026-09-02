@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import { getTechIcon } from "./icons";
 
 /* ─── Data — your own framing: WHY each category exists, not just a list ─── */
 const CATEGORIES = [
@@ -78,6 +79,104 @@ const CATEGORIES = [
   },
 ];
 
+/* ─── Flat logo list for the showcase wall — derived from CATEGORIES above,
+   with compound entries ("Llama 3.1 / Mistral") split into individual
+   technologies so each can carry its own (real, verified) icon or an
+   honest fallback. Kept as an explicit list rather than auto-parsed from
+   CATEGORIES so it's obvious at a glance which items intentionally have
+   no icon rather than that being a parsing accident. ───────────────────── */
+const LOGO_WALL: { name: string; color: string }[] = [
+  { name: "Claude",        color: "#00e5b4" },
+  { name: "GPT-4",         color: "#00e5b4" },
+  { name: "Llama",         color: "#00e5b4" },
+  { name: "Mistral",       color: "#00e5b4" },
+  { name: "Gemini",        color: "#00e5b4" },
+  { name: "LangGraph",     color: "#00d19e" },
+  { name: "Temporal",      color: "#00d19e" },
+  { name: "MCP",           color: "#00d19e" },
+  { name: "pgvector",      color: "#00c49a" },
+  { name: "Pinecone",      color: "#00c49a" },
+  { name: "Weaviate",      color: "#00c49a" },
+  { name: "Elasticsearch", color: "#00c49a" },
+  { name: "Braintrust",    color: "#00b48a" },
+  { name: "Ragas",         color: "#00b48a" },
+  { name: "OpenTelemetry", color: "#00a07a" },
+  { name: "Langfuse",      color: "#00a07a" },
+  { name: "Datadog",       color: "#00a07a" },
+  { name: "Prometheus",    color: "#00a07a" },
+  { name: "Grafana",       color: "#00a07a" },
+  { name: "AWS",           color: "#008a68" },
+  { name: "GCP",           color: "#008a68" },
+  { name: "Azure",         color: "#008a68" },
+  { name: "Kubernetes",    color: "#008a68" },
+  { name: "vLLM",          color: "#008a68" },
+  { name: "Ray",           color: "#008a68" },
+];
+
+/* ─── Tilt card — a lightweight, performant 3D hover effect.
+   Uses a ref + direct style writes instead of React state, so mouse
+   movement never triggers a re-render — just a transform update, which
+   is cheap and GPU-composited. Falls back to a flat static card under
+   prefers-reduced-motion or on touch devices (no continuous pointer
+   position to tilt against, and motion-on-touch feels like a bug, not
+   a feature). ────────────────────────────────────────────────────────── */
+function TechLogoCard({ name, color, delay }: { name: string; color: string; delay: number }) {
+  const cardRef = useRef<HTMLDivElement>(null);
+  const [visible, setVisible] = useState(false);
+  const [reduceMotion, setReduceMotion] = useState(false);
+  const Icon = getTechIcon(name);
+
+  useEffect(() => {
+    setReduceMotion(window.matchMedia("(prefers-reduced-motion: reduce)").matches);
+    const el = cardRef.current; if (!el) return;
+    const io = new IntersectionObserver(([e]) => { if (e.isIntersecting) { setVisible(true); io.disconnect(); } }, { threshold: 0.1 });
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+
+  const handlePointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (reduceMotion || e.pointerType === "touch") return;
+    const el = cardRef.current; if (!el) return;
+    const rect = el.getBoundingClientRect();
+    const px = (e.clientX - rect.left) / rect.width;
+    const py = (e.clientY - rect.top) / rect.height;
+    const rotateY = (px - 0.5) * 16;
+    const rotateX = (0.5 - py) * 16;
+    el.style.transform = `perspective(600px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(8px)`;
+  };
+  const handlePointerLeave = () => {
+    const el = cardRef.current; if (!el) return;
+    el.style.transform = "perspective(600px) rotateX(0deg) rotateY(0deg) translateZ(0px)";
+  };
+
+  return (
+    <div
+      ref={cardRef}
+      onPointerMove={handlePointerMove}
+      onPointerLeave={handlePointerLeave}
+      className={`group relative flex flex-col items-center justify-center gap-3 aspect-square rounded-2xl
+        border border-[#1e2b28] bg-[#0d0f0e] transition-[opacity,translate,border-color] duration-500 ease-out
+        hover:border-[#2a3d38] will-change-transform
+        ${visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}
+      style={{ transitionDelay: `${delay}ms`, transformStyle: "preserve-3d" }}
+    >
+      <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
+        style={{ background: `radial-gradient(circle at 50% 30%, ${color}12, transparent 70%)` }} />
+      {Icon ? (
+        <Icon size={30} color={color} style={{ opacity: 0.85 }} />
+      ) : (
+        <span className="w-8 h-8 rounded-lg flex items-center justify-center text-xs font-black"
+          style={{ background: `${color}12`, color, border: `1px solid ${color}30` }}>
+          {name.slice(0, 2).toUpperCase()}
+        </span>
+      )}
+      <span className="text-[11px] font-semibold text-[#8aada8] group-hover:text-white transition-colors duration-200 text-center px-2">
+        {name}
+      </span>
+    </div>
+  );
+}
+
 /* ─── Reveal ─────────────────────────────────────────────────────────────── */
 function Reveal({ children, delay = 0, className = "" }: { children: React.ReactNode; delay?: number; className?: string }) {
   const ref = useRef<HTMLDivElement>(null);
@@ -123,15 +222,22 @@ function CategoryBlock({ cat, index }: { cat: typeof CATEGORIES[0]; index: numbe
             <p className="text-[#8aada8] leading-relaxed text-sm mb-8">{cat.reasoning}</p>
 
             <div className="flex flex-col gap-1">
-              {cat.items.map((item, i) => (
-                <button key={item.name} onClick={() => setActiveItem(i)}
-                  className={`text-left px-4 py-3 rounded-xl transition-all duration-200 flex items-center justify-between gap-3
-                    ${activeItem === i ? "bg-[#0d1a16]" : "hover:bg-[#0d0f0e]"}`}>
-                  <span className={`text-sm font-semibold ${activeItem === i ? "text-white" : "text-[#5a7570]"}`}>{item.name}</span>
-                  <span className={`text-lg transition-all duration-200 ${activeItem === i ? "opacity-100" : "opacity-0 -translate-x-2"}`}
-                    style={{ color: cat.color }}>→</span>
-                </button>
-              ))}
+              {cat.items.map((item, i) => {
+                const primaryName = item.name.replace(/\([^)]*\)/g, "").split(/\s*\/\s*/)[0].replace(/\s*[\d.]+.*$/, "").trim();
+                const Icon = getTechIcon(primaryName);
+                return (
+                  <button key={item.name} onClick={() => setActiveItem(i)}
+                    className={`text-left px-4 py-3 rounded-xl transition-all duration-200 flex items-center gap-3
+                      ${activeItem === i ? "bg-[#0d1a16]" : "hover:bg-[#0d0f0e]"}`}>
+                    {Icon
+                      ? <Icon size={16} color={activeItem === i ? cat.color : "#3a5550"} className="shrink-0" />
+                      : <span className="w-4 h-4 shrink-0" />}
+                    <span className={`text-sm font-semibold flex-1 ${activeItem === i ? "text-white" : "text-[#5a7570]"}`}>{item.name}</span>
+                    <span className={`text-lg transition-all duration-200 ${activeItem === i ? "opacity-100" : "opacity-0 -translate-x-2"}`}
+                      style={{ color: cat.color }}>→</span>
+                  </button>
+                );
+              })}
             </div>
           </div>
 
@@ -220,6 +326,26 @@ export default function StackPage() {
               ))}
             </div>
           </Reveal>
+        </div>
+      </section>
+
+      {/* ── LOGO WALL ─────────────────────────────────────────────────── */}
+      <section className="px-8 py-20 border-t border-[#1e2b28] bg-[#0d0f0e]">
+        <div className="max-w-screen-xl mx-auto">
+          <Reveal>
+            <p className="text-[#00e5b4] text-xs tracking-[0.2em] uppercase mb-3 text-center">The Stack, At A Glance</p>
+          </Reveal>
+          <Reveal delay={60}>
+            <p className="text-[#5a7570] text-sm text-center max-w-md mx-auto mb-14">
+              Every one of these earns its place below — hover a card, or jump straight to the category.
+            </p>
+          </Reveal>
+          <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-3 sm:gap-4"
+            style={{ perspective: "1200px" }}>
+            {LOGO_WALL.map((tech, i) => (
+              <TechLogoCard key={tech.name} name={tech.name} color={tech.color} delay={(i % 12) * 40} />
+            ))}
+          </div>
         </div>
       </section>
 

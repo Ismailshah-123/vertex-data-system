@@ -4,6 +4,18 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
 import CinematicVideo from "@/components/media/CinematicVideo";
+import dynamic from "next/dynamic";
+
+const VertexIntelligentArchitecture = dynamic(
+  () => import("@/components/vertex-3d-hero/VertexIntelligentArchitecture").then(m => m.VertexIntelligentArchitecture),
+  {
+    ssr: false, // canvas/WebGL-only, nothing meaningful to server-render
+    loading: () => (
+      <div className="w-full h-full rounded-2xl"
+        style={{ background: "radial-gradient(circle at 50% 50%, rgba(0,229,180,0.06), transparent 70%)" }} />
+    ),
+  }
+);
 
 /* ─── Data ───────────────────────────────────────────────────────────────── */
 const CAPABILITIES = [
@@ -195,60 +207,6 @@ function MagneticBtn({ children, className = "", href }: { children: React.React
   );
 }
 
-/* ─── Live agent-performance widget (like the reference hero card) ───────── */
-function AgentPerfWidget() {
-  const [resolution, setResolution] = useState(0);
-  const [latency, setLatency] = useState(0);
-  const { ref, visible } = useReveal(0.3);
-  useEffect(() => {
-    if (!visible) return;
-    let r = 0, l = 900;
-    const t = setInterval(() => {
-      r = Math.min(r + 2.4, 68);
-      l = Math.max(l - 5, 740);
-      setResolution(Math.round(r));
-      setLatency(Math.round(l));
-      if (r >= 68 && l <= 740) clearInterval(t);
-    }, 30);
-    return () => clearInterval(t);
-  }, [visible]);
-
-  return (
-    <div ref={ref as React.RefObject<HTMLDivElement>}
-      className="bg-[#0d0f0e] border border-[#1e2b28] rounded-2xl p-5 backdrop-blur-sm w-full max-w-sm">
-      <div className="flex items-center justify-between mb-4">
-        <div>
-          <div className="text-[10px] tracking-[0.15em] uppercase text-[#3a5550] mb-1">Agent Performance</div>
-          <div className="flex items-center gap-2 text-sm font-semibold text-white">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#00e5b4] animate-pulse" />
-            Live · prod
-          </div>
-        </div>
-        <span className="text-[10px] font-bold px-2.5 py-1 rounded-full bg-[#00e5b4]/10 border border-[#00e5b4]/30 text-[#00e5b4]">
-          Healthy
-        </span>
-      </div>
-      <div className="grid grid-cols-3 gap-2">
-        <div className="bg-[#0a0c0b] rounded-xl p-3 min-w-0">
-          <div className="text-[9px] text-[#00e5b4] mb-1">↗ +4.2</div>
-          <div className="text-lg font-black text-white tabular-nums truncate">{resolution}%</div>
-          <div className="text-[9px] text-[#3a5550]">Resolution</div>
-        </div>
-        <div className="bg-[#0a0c0b] rounded-xl p-3 min-w-0">
-          <div className="text-[9px] text-[#00e5b4] mb-1">↘ -12%</div>
-          <div className="text-lg font-black text-white tabular-nums truncate">{latency}ms</div>
-          <div className="text-[9px] text-[#3a5550]">p95 latency</div>
-        </div>
-        <div className="bg-[#0a0c0b] rounded-xl p-3 min-w-0">
-          <div className="text-[9px] text-[#00e5b4] mb-1">↗ +2.3</div>
-          <div className="text-lg font-black text-white tabular-nums truncate">+19</div>
-          <div className="text-[9px] text-[#3a5550]">CSAT</div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
 function FAQItem({ q, a }: { q: string; a: string }) {
   const [open, setOpen] = useState(false);
   return (
@@ -359,14 +317,14 @@ export default function Home() {
             </motion.div>
           </motion.div>
 
-          {/* Live widget */}
+          {/* Vertex Intelligent Architecture — 3D */}
           <motion.div
-            className="flex justify-center md:justify-end"
+            className="w-full aspect-square max-w-[520px] mx-auto md:mx-0"
             initial={reduceMotion ? { opacity: 0 } : { opacity: 0, scale: 0.92 }}
             animate={reduceMotion ? { opacity: 1 } : { opacity: 1, scale: 1 }}
             transition={reduceMotion ? { duration: 0.01 } : { type: "spring", stiffness: 80, damping: 16, delay: 0.5 }}
           >
-            <AgentPerfWidget />
+            <VertexIntelligentArchitecture />
           </motion.div>
         </div>
 
