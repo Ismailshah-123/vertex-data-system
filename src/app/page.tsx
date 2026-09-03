@@ -476,13 +476,46 @@ export default function Home() {
       </section>
 
       {/* ── CINEMATIC VISUAL: SYSTEM FLOW ────────────────────────────────── */}
-      <section className="bg-[#0d0f0e] py-20 px-8 border-t border-[#1e2b28]">
-        <div className="max-w-screen-xl mx-auto">
-          <CinematicVideo
-            src="/videos/system-flow.mp4"
-            poster="/videos/system-flow-poster.jpg"
-            label="Fragmented data streams resolving into a single organized system"
-          />
+      <section className="bg-[#0d0f0e] py-24 md:py-32 px-8 border-t border-[#1e2b28] relative overflow-hidden">
+        <div className="absolute inset-0 bg-[linear-gradient(rgba(0,229,180,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(0,229,180,0.02)_1px,transparent_1px)] bg-[size:48px_48px] pointer-events-none" />
+        <div className="max-w-screen-xl mx-auto grid md:grid-cols-[0.85fr_1.15fr] gap-12 md:gap-16 items-center relative">
+          {/* Copy */}
+          <Reveal>
+            <div className="relative pl-6 border-l border-[#1e2b28]">
+              <span className="absolute top-0 -left-px w-px h-10 bg-[#00e5b4]/40" />
+              <span className="absolute bottom-0 -left-px w-px h-10 bg-[#00e5b4]/40" />
+              <div className="flex items-center gap-3 mb-6">
+                <span className="font-mono text-[11px] text-[#00e5b4] uppercase tracking-widest">01 // System Flow</span>
+              </div>
+              <h2 className="text-[clamp(1.8rem,3.2vw,2.6rem)] font-black tracking-tight leading-[1.1] mb-5">
+                Scattered data, one coherent system.
+              </h2>
+              <p className="text-[#8aada8] text-base leading-relaxed mb-8 max-w-md">
+                Most organizations don't have a data problem — they have a dozen disconnected systems that were never designed to talk to each other. This is the same pipeline architecture behind every project on this site: ingestion, normalization, and routing, built to hold up once it's actually carrying production traffic.
+              </p>
+              <Link href="/process"
+                className="inline-flex items-center gap-2 border border-[#2a3d38] text-white font-semibold px-6 py-3.5 rounded-xl text-sm
+                  hover:border-[#00e5b4] hover:text-[#00e5b4] transition-colors duration-300 group">
+                See how it's built
+                <span className="group-hover:translate-x-1 transition-transform duration-200">→</span>
+              </Link>
+            </div>
+          </Reveal>
+
+          {/* Video, in an architectural frame */}
+          <Reveal delay={100}>
+            <div className="relative border border-[#1e2b28] bg-[#0a0c0b] p-3">
+              <span className="absolute top-0 left-0 w-4 h-4 border-t border-l border-[#00e5b4]/40" />
+              <span className="absolute top-0 right-0 w-4 h-4 border-t border-r border-[#00e5b4]/40" />
+              <span className="absolute bottom-0 left-0 w-4 h-4 border-b border-l border-[#00e5b4]/40" />
+              <span className="absolute bottom-0 right-0 w-4 h-4 border-b border-r border-[#00e5b4]/40" />
+              <CinematicVideo
+                src="/videos/system-flow.mp4"
+                poster="/videos/system-flow-poster.jpg"
+                label="Fragmented data streams resolving into a single organized system"
+              />
+            </div>
+          </Reveal>
         </div>
       </section>
 
