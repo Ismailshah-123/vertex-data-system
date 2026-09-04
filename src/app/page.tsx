@@ -702,18 +702,18 @@ export default function Home() {
           <Reveal><p className="text-[#00e5b4] text-xs tracking-[0.2em] uppercase mb-4 font-semibold">Working style</p></Reveal>
           <Reveal delay={80}>
             <h2 className="text-[clamp(1.8rem,4vw,3rem)] font-black tracking-tight leading-tight mb-12">
-              Built the way I'd want to <span className="text-[#00e5b4]">hire</span>
+              Built the way we'd want to <span className="text-[#00e5b4]">hire</span>
             </h2>
           </Reveal>
           <Reveal delay={140}>
             <div className="text-5xl text-[#1a2422] font-serif mb-4">"</div>
             <p className="text-lg text-[#c8d8d4] leading-relaxed mb-8 -mt-8">
-              You get one person who understands your system end to end — not a rotating cast of account managers. I write the code, I own the outcome, and I'm reachable when something breaks.
+              You get direct access to the team actually building your system — not a rotating cast of account managers. We write the code, we own the outcome, and we're reachable when something breaks.
             </p>
             <div className="w-10 h-10 rounded-full bg-[#00e5b4]/10 border border-[#00e5b4]/30 flex items-center justify-center mx-auto mb-3 text-[#00e5b4] font-black text-sm">
               V
             </div>
-            <p className="text-xs text-[#3a5550]">Ismail Shah, Founder — Vertex Data Systems</p>
+            <p className="text-xs text-[#3a5550]">Vertex Data Systems</p>
           </Reveal>
         </div>
       </section>

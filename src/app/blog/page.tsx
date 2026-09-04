@@ -173,7 +173,7 @@ export default function BlogPage() {
           </Reveal>
           <Reveal delay={200}>
             <p className="text-[#5a7570] text-lg max-w-xl leading-relaxed">
-              No thought leadership. No hot takes. Just hard-won experience from building AI systems in production, written by the person who built them.
+              No thought leadership. No hot takes. Just hard-won experience from building AI systems in production, written by the team that built them.
             </p>
           </Reveal>
         </div>

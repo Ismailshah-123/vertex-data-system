@@ -3,6 +3,12 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import CinematicVideo from "@/components/media/CinematicVideo";
+import dynamic from "next/dynamic";
+
+const VertexNetworkVisual = dynamic(
+  () => import("@/components/vertex-3d-network/VertexNetworkVisual").then(m => m.VertexNetworkVisual),
+  { ssr: false, loading: () => null }
+);
 
 /* ─── Data — your own 6-stage flow (not copied, your framing) ────────────── */
 const STAGES = [
@@ -178,10 +184,14 @@ export default function ProcessPage() {
 
       {/* ── HERO ──────────────────────────────────────────────────────── */}
       <section className="relative min-h-[75vh] flex flex-col justify-center px-8 pt-32 pb-16 overflow-hidden">
-        <div className="absolute inset-0 bg-[linear-gradient(rgba(0,229,180,0.025)_1px,transparent_1px),linear-gradient(90deg,rgba(0,229,180,0.025)_1px,transparent_1px)] bg-[size:64px_64px] [mask-image:radial-gradient(ellipse_70%_70%_at_30%_50%,black,transparent)]" />
+        {/* 3D network — ambient backdrop, right-weighted behind the left-aligned text */}
+        <div className="absolute inset-y-0 right-0 w-full md:w-[65%] opacity-50">
+          <VertexNetworkVisual mode="process" />
+        </div>
+        <div className="absolute inset-0 bg-[linear-gradient(rgba(0,229,180,0.025)_1px,transparent_1px),linear-gradient(90deg,rgba(0,229,180,0.025)_1px,transparent_1px)] bg-[size:64px_64px] [mask-image:radial-gradient(ellipse_70%_70%_at_30%_50%,black,transparent)] pointer-events-none" />
         <div className="absolute top-1/3 right-1/4 w-[500px] h-[500px] bg-[radial-gradient(circle,rgba(0,229,180,0.05),transparent_70%)] pointer-events-none animate-pulse" />
 
-        <div className="max-w-screen-xl mx-auto w-full" ref={heroRef}>
+        <div className="max-w-screen-xl mx-auto w-full relative z-10" ref={heroRef}>
           <Reveal>
             <span className="inline-flex items-center gap-3 mb-8">
               <span className="w-8 h-px bg-[#00e5b4]" />

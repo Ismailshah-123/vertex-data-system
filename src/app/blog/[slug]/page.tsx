@@ -111,7 +111,7 @@ export default async function BlogPostPage(
 
         <div className="bg-[#0d0f0e] border border-[#1e2b28] rounded-2xl p-8 mb-12">
           <p className="text-sm text-[#5a7570] leading-relaxed">
-            The full write-up for this one is still being finished. Want to talk through it now instead of waiting? Reach out directly and I'll walk you through it.
+            The full write-up for this one is still being finished. Want to talk through it now instead of waiting? Reach out directly and we'll walk you through it.
           </p>
         </div>
 
@@ -128,7 +128,7 @@ export default async function BlogPostPage(
             href="/contact"
             className="inline-flex items-center justify-center gap-2 bg-[#00e5b4] text-black font-bold px-8 py-3.5 rounded-xl text-sm hover:bg-white transition-all duration-300"
           >
-            Talk to Ismail →
+            Talk to us →
           </Link>
           <Link
             href="/blog"

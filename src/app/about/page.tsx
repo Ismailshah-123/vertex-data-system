@@ -2,34 +2,14 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import dynamic from "next/dynamic";
 
-/* ─── Types ──────────────────────────────────────────────────────────────── */
-interface TeamMember {
-  initials: string;
-  name: string;
-  role: string;
-  bio: string;
-  skills: string[];
-  linkedin: string;
-  twitter: string;
-  color: string;
-  accentColor: string;
-}
+const VertexNetworkVisual = dynamic(
+  () => import("@/components/vertex-3d-network/VertexNetworkVisual").then(m => m.VertexNetworkVisual),
+  { ssr: false, loading: () => null }
+);
 
 /* ─── Data ───────────────────────────────────────────────────────────────── */
-const TEAM: TeamMember[] = [
-  {
-    initials: "IS",
-    name: "Ismail Shah",
-    role: "Founder",
-    bio: "Builds production AI systems end to end — a multi-tenant voice AI platform with real Stripe billing and a 35-test suite behind it, a 9-agent job-search automation system, an AI interview platform running live voice conversations over WebRTC. BS in Artificial Intelligence. Currently building VertexData alongside hands-on SAP Business One implementation work.",
-    skills: ["Multi-Agent Systems", "RAG", "Voice AI", "FastAPI & PostgreSQL"],
-    linkedin: "https://linkedin.com/in/ismailshah-57b425327", twitter: "#",
-    color: "from-[#001a14] to-[#003326]",
-    accentColor: "#00e5b4",
-  },
-];
-
 const THESIS = [
   {
     tag: "The gap",
@@ -115,125 +95,6 @@ function Reveal({
   );
 }
 
-/* ─── Avatar card ────────────────────────────────────────────────────────── */
-function AvatarCard({ member, index }: { member: TeamMember; index: number }) {
-  const [hovered, setHovered] = useState(false);
-  const ref = useRef<HTMLDivElement>(null);
-  const [visible, setVisible] = useState(false);
-
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const io = new IntersectionObserver(
-      ([e]) => { if (e.isIntersecting) { setVisible(true); io.disconnect(); } },
-      { threshold: 0.15 }
-    );
-    io.observe(el);
-    return () => io.disconnect();
-  }, []);
-
-  return (
-    <div
-      ref={ref}
-      className={`transition-all duration-700 ${visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-12"}`}
-      style={{ transitionDelay: `${index * 100}ms` }}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-    >
-      <div className={`relative group bg-[#0d0f0e] border border-[#1e2b28] rounded-2xl overflow-hidden
-        transition-all duration-500
-        ${hovered ? "border-[#00e5b4]/40 shadow-[0_24px_80px_rgba(0,229,180,0.1)] -translate-y-2" : ""}`}>
-
-        {/* Top accent beam */}
-        <div className={`absolute top-0 left-0 right-0 h-px transition-all duration-500
-          ${hovered ? "bg-gradient-to-r from-transparent via-[#00e5b4] to-transparent opacity-100" : "opacity-0"}`} />
-
-        {/* Avatar area */}
-        <div className={`relative h-52 bg-gradient-to-br ${member.color} flex items-center justify-center overflow-hidden`}>
-          {/* Animated grid bg */}
-          <div className="absolute inset-0 bg-[linear-gradient(rgba(0,229,180,0.04)_1px,transparent_1px),linear-gradient(90deg,rgba(0,229,180,0.04)_1px,transparent_1px)] bg-[size:24px_24px]" />
-
-          {/* Orbiting ring */}
-          <div className={`absolute w-36 h-36 rounded-full border border-[${member.accentColor}]/20
-            transition-all duration-700 ${hovered ? "scale-110 opacity-100" : "scale-95 opacity-40"}`}
-            style={{ borderColor: `${member.accentColor}30` }} />
-          <div className={`absolute w-28 h-28 rounded-full border border-dashed
-            transition-all duration-1000 ${hovered ? "rotate-90 opacity-60" : "opacity-20"}`}
-            style={{ borderColor: `${member.accentColor}50`, transitionTimingFunction: "linear" }} />
-
-          {/* Initials */}
-          <div className="relative z-10 flex flex-col items-center gap-3">
-            <div className={`w-20 h-20 rounded-2xl flex items-center justify-center
-              text-2xl font-black transition-all duration-500
-              ${hovered ? "scale-110" : "scale-100"}`}
-              style={{
-                background: `linear-gradient(135deg, ${member.accentColor}15, ${member.accentColor}30)`,
-                border: `1.5px solid ${member.accentColor}40`,
-                color: member.accentColor,
-                boxShadow: hovered ? `0 0 40px ${member.accentColor}30` : "none",
-              }}>
-              {member.initials}
-            </div>
-          </div>
-
-          {/* Scan line effect */}
-          {hovered && (
-            <div className="absolute inset-0 pointer-events-none overflow-hidden">
-              <div className="absolute left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#00e5b4]/30 to-transparent"
-                style={{ animation: "scanDown 1.5s ease-in-out infinite" }} />
-            </div>
-          )}
-        </div>
-
-        {/* Info */}
-        <div className="p-5">
-          <h3 className={`font-bold text-base text-white mb-0.5 transition-colors duration-300 ${hovered ? "text-[#00e5b4]" : ""}`}>
-            {member.name}
-          </h3>
-          <p className="text-xs text-[#3a5550] mb-3 font-medium tracking-wide">{member.role}</p>
-
-          {/* Bio — reveals on hover */}
-          <div className={`overflow-hidden transition-all duration-500 ${hovered ? "max-h-40 opacity-100" : "max-h-0 opacity-0"}`}>
-            <p className="text-xs text-[#5a7570] leading-relaxed mb-4">{member.bio}</p>
-          </div>
-
-          {/* Skill chips */}
-          <div className="flex flex-wrap gap-1.5 mb-4">
-            {member.skills.map(s => (
-              <span key={s}
-                className="text-[10px] px-2 py-0.5 rounded-full border border-[#1e2b28] text-[#3a5550]
-                  transition-all duration-200 hover:border-[#00e5b4]/40 hover:text-[#00e5b4]">
-                {s}
-              </span>
-            ))}
-          </div>
-
-          {/* Social links */}
-          <div className="flex items-center gap-2 pt-3 border-t border-[#1e2b28]">
-            <a href={member.linkedin}
-              className="flex items-center gap-1.5 text-[10px] text-[#3a5550]
-                hover:text-[#00e5b4] transition-colors tracking-wide">
-              <svg viewBox="0 0 24 24" fill="currentColor" className="w-3 h-3">
-                <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
-              </svg>
-              LinkedIn
-            </a>
-            <span className="text-[#1e2b28]">·</span>
-            <a href={member.twitter}
-              className="flex items-center gap-1.5 text-[10px] text-[#3a5550]
-                hover:text-[#00e5b4] transition-colors tracking-wide">
-              <svg viewBox="0 0 24 24" fill="currentColor" className="w-3 h-3">
-                <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.737-8.835L1.254 2.25H8.08l4.258 5.629L18.244 2.25zm-1.161 17.52h1.833L7.084 4.126H5.117L17.083 19.77z"/>
-              </svg>
-              Twitter
-            </a>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
 /* ─── Page ────────────────────────────────────────────────────────────────── */
 export default function AboutPage() {
   const heroRef = useRef<HTMLDivElement>(null);
@@ -265,13 +126,17 @@ export default function AboutPage() {
       {/* ── HERO ───────────────────────────────────────────────────────── */}
       <section className="relative min-h-[80vh] flex flex-col items-center justify-center
         text-center px-6 pt-32 pb-20 overflow-hidden">
+        {/* 3D network — ambient backdrop, behind all text content */}
+        <div className="absolute inset-0 opacity-60">
+          <VertexNetworkVisual mode="about" />
+        </div>
         {/* Grid */}
-        <div className="absolute inset-0 bg-[linear-gradient(rgba(0,229,180,0.025)_1px,transparent_1px),linear-gradient(90deg,rgba(0,229,180,0.025)_1px,transparent_1px)] bg-[size:64px_64px] [mask-image:radial-gradient(ellipse_80%_80%_at_50%_50%,black,transparent)]" />
+        <div className="absolute inset-0 bg-[linear-gradient(rgba(0,229,180,0.025)_1px,transparent_1px),linear-gradient(90deg,rgba(0,229,180,0.025)_1px,transparent_1px)] bg-[size:64px_64px] [mask-image:radial-gradient(ellipse_80%_80%_at_50%_50%,black,transparent)] pointer-events-none" />
         {/* Glow */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px]
           bg-[radial-gradient(circle,rgba(0,229,180,0.05)_0%,transparent_70%)] pointer-events-none animate-pulse" />
 
-        <div ref={heroRef}>
+        <div ref={heroRef} className="relative z-10">
           <Reveal>
             <span className="inline-flex items-center gap-3 mb-8">
               <span className="w-8 h-px bg-[#00e5b4]" />
@@ -307,11 +172,11 @@ export default function AboutPage() {
             <div className="mt-8 flex items-center gap-4">
               <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#001a14] to-[#003326]
                 border border-[#00e5b4]/30 flex items-center justify-center text-xs font-black text-[#00e5b4]">
-                IS
+                V
               </div>
               <div>
-                <p className="text-sm font-semibold text-white">Ismail Shah</p>
-                <p className="text-xs text-[#3a5550]">Founder</p>
+                <p className="text-sm font-semibold text-white">Vertex Data Systems</p>
+                <p className="text-xs text-[#3a5550]">Engineering Team</p>
               </div>
             </div>
           </Reveal>
@@ -365,30 +230,24 @@ export default function AboutPage() {
       {/* ── TEAM ────────────────────────────────────────────────────────── */}
       <section id="team" className="py-28 px-8 bg-[#0d0f0e]">
         <div className="max-w-screen-xl mx-auto">
-          <Reveal><p className="text-[#00e5b4] text-xs tracking-[0.2em] uppercase mb-4">The People</p></Reveal>
+          <Reveal><p className="text-[#00e5b4] text-xs tracking-[0.2em] uppercase mb-4">The Team</p></Reveal>
           <Reveal delay={80}>
             <h2 className="text-[clamp(2rem,5vw,4rem)] font-black tracking-tight leading-none mb-4">
-              Small by design — for now.
+              Small by design.
             </h2>
           </Reveal>
           <Reveal delay={140}>
             <p className="text-[#5a7570] text-lg max-w-2xl mb-16 leading-relaxed">
-              Right now, that means one founder, hands-on with every single engagement. No bench of juniors, no account managers between you and the work — just direct execution.
+              A focused team, hands-on with every engagement. No bench of juniors, no account managers between you and the work — just direct execution.
             </p>
           </Reveal>
 
-          <div className="max-w-sm mx-auto">
-            {TEAM.map((member, i) => (
-              <AvatarCard key={member.name} member={member} index={i} />
-            ))}
-          </div>
-
           {/* Hiring CTA */}
           <Reveal delay={200}>
-            <div className="mt-16 border border-dashed border-[#2a3d38] rounded-2xl p-10 text-center
+            <div className="max-w-2xl mx-auto border border-dashed border-[#2a3d38] rounded-2xl p-10 text-center
               hover:border-[#00e5b4]/30 transition-colors duration-500 group">
               <div className="text-3xl mb-4 group-hover:scale-110 transition-transform duration-300">+</div>
-              <h3 className="font-bold text-lg mb-2 group-hover:text-[#00e5b4] transition-colors">You, maybe?</h3>
+              <h3 className="font-bold text-lg mb-2 group-hover:text-[#00e5b4] transition-colors">Growing the team</h3>
               <p className="text-sm text-[#3a5550] mb-6 max-w-sm mx-auto">
                 We hire obsessives who care more about the problem than the title. Always open to exceptional ML engineers, data scientists, and AI researchers.
               </p>

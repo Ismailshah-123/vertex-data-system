@@ -156,27 +156,53 @@ const PROJECTS: Record<string, ProjectDetail> = {
     ],
     tags: ["YOLOv9", "TensorRT", "NVIDIA Jetson", "OpenCV"],
   },
-  "ai-security-audit": {
-    slug: "ai-security-audit", category: "Security",
-    name: "AI Security & Red Team Audit",
-    tagline: "Find the hole before someone else does.",
-    color: "#9b5de5", timeline: "2–3 weeks",
-    overview: "A full adversarial assessment of your existing LLM or ML deployment. We attempt real prompt injection, data extraction, and model inversion attacks, then hand you a prioritised remediation report — not a generic checklist, but findings specific to your actual system.",
+  "property-developer-crm": {
+    slug: "property-developer-crm", category: "CRM",
+    name: "CRM for Property Developers",
+    tagline: "From first inquiry to handover, one system.",
+    color: "#00c49a", timeline: "6–10 weeks",
+    // NOTE: placeholder-level detail — built from what a property/builder
+    // CRM typically needs, not verified specifics of the real deployment.
+    // Swap in the actual client name, exact features shipped, and real
+    // tech stack once confirmed.
+    overview: "A CRM built for how property developers actually sell — tracking every inquiry against live unit inventory, automating follow-ups so no lead goes cold, and giving sales teams one pipeline view from first contact through to handover.",
     included: [
-      "Full OWASP LLM Top 10 assessment against your deployment",
-      "Live red-team attempt: prompt injection, jailbreaks, data exfiltration",
-      "Model inversion and training-data extraction testing",
-      "Prioritised remediation report — critical, high, medium, low",
-      "1 follow-up call to walk through findings with your engineering team",
-      "Re-test of critical findings once remediated (within 30 days)",
+      "Lead capture from listings, walk-ins, and referral sources into one pipeline",
+      "Live unit/inventory tracking tied to each lead and deal stage",
+      "Automated follow-up sequences — no manual chasing of warm leads",
+      "Sales pipeline with custom stages matched to the actual sales process",
+      "Reporting dashboard — conversion by source, stage, and sales rep",
     ],
-    notIncluded: ["Implementing the remediation (scoped separately based on findings)", "Infrastructure penetration testing beyond the AI system itself"],
+    notIncluded: ["Listing-site integrations beyond what's scoped at kickoff", "Accounting/finance system integration (scoped separately if needed)"],
     process: [
-      { phase: "Week 1", body: "System walkthrough and threat modelling scoped to your specific deployment and risk profile." },
-      { phase: "Week 2", body: "Active red-teaming: injection attempts, extraction attempts, adversarial input testing." },
-      { phase: "Week 3", body: "Report delivery, findings walkthrough call, and remediation prioritisation." },
+      { phase: "Weeks 1–2", body: "Mapping the actual sales process and inventory structure before writing any code." },
+      { phase: "Weeks 3–7", body: "Core CRM build — pipeline, inventory sync, automated follow-ups." },
+      { phase: "Weeks 8–10", body: "Team onboarding, reporting setup, and handover." },
     ],
-    tags: ["OWASP LLM", "Red Teaming", "Guardrails AI"],
+    tags: ["CRM", "Sales Automation", "Real Estate"],
+  },
+  "school-management-crm": {
+    slug: "school-management-crm", category: "CRM",
+    name: "CRM for Schools & Educational Institutions",
+    tagline: "Admissions that don't lose track of a single family.",
+    color: "#00b48a", timeline: "6–10 weeks",
+    // NOTE: same as above — placeholder-level detail pending the real
+    // specifics of what was actually built and shipped.
+    overview: "An admissions and enrollment CRM built around how schools actually recruit — every inquiry tracked from first contact through enrollment, with automated follow-ups for parents and a clear pipeline view for the admissions team.",
+    included: [
+      "Inquiry capture from your website, events, and referrals into one pipeline",
+      "Automated follow-up sequences for parents at every admissions stage",
+      "Enrollment tracking from inquiry through confirmed enrollment",
+      "Staff-facing dashboard for the admissions team's day-to-day pipeline",
+      "Reporting on inquiry sources, conversion, and enrollment trends",
+    ],
+    notIncluded: ["Student information system (SIS) integration beyond what's scoped at kickoff", "Billing/tuition payment processing (scoped separately if needed)"],
+    process: [
+      { phase: "Weeks 1–2", body: "Mapping the actual admissions process before writing any code." },
+      { phase: "Weeks 3–7", body: "Core CRM build — pipeline, automated follow-ups, staff dashboard." },
+      { phase: "Weeks 8–10", body: "Admissions team onboarding, reporting setup, and handover." },
+    ],
+    tags: ["CRM", "Education", "Enrollment Automation"],
   },
 };
 

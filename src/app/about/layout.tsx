@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "About Us — Founder-Led AI & Data Engineering",
+  title: "About Us — AI & Data Engineering, Built for Production",
   description:
-    "Founded in 2026. Early-stage and founder-led — direct access to whoever builds your system, source-code ownership on every project, no account managers in between.",
+    "Founded in 2026. Early-stage and focused — direct access to the team building your system, source-code ownership on every project, no account managers in between.",
   openGraph: {
-    title: "About VertexData Systems",
-    description: "Founder-led AI and data engineering. Direct access to whoever's building your system, from day one.",
+    title: "About Vertex Data Systems",
+    description: "AI and data engineering, built for production. Direct access to the team building your system, from day one.",
     url: "https://vertexdata.systems/about",
   },
   alternates: { canonical: "https://vertexdata.systems/about" },

@@ -22,9 +22,10 @@ const SERVICE_SLUGS = [
 
 // Keep in sync with the keys in src/app/projects/[slug]/page.tsx's PROJECTS object.
 const PROJECT_SLUGS = [
-  "agentic-support-system", "ai-security-audit", "analytics-platform-build",
+  "agentic-support-system", "analytics-platform-build",
   "data-warehouse-migration", "predictive-model-deployment",
   "rag-knowledge-assistant", "vision-quality-inspection",
+  "property-developer-crm", "school-management-crm",
 ];
 
 export default function sitemap(): MetadataRoute.Sitemap {
