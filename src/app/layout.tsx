@@ -5,6 +5,7 @@ import Navbar          from "@/components/navbar/Navbar";
 import Footer          from "@/components/footer/Footer";
 import ParticleCanvas  from "@/components/particles/ParticleCanvas";
 import ScrollProgress  from "@/components/scroll-progress/ScrollProgress";
+import CustomCursor    from "@/components/ui/CustomCursor";
 import { safeJsonLd } from "@/lib/safeJsonLd";
 
 // Display font — used for all headings (h1/h2/h3). A confident grotesque
@@ -28,8 +29,8 @@ const manrope = Manrope({
 
 export const metadata: Metadata = {
   title: {
-    default:  "VertexData Systems — Enterprise AI & Data Intelligence",
-    template: "%s | VertexData Systems",
+    default:  "Vertex Data Systems — Enterprise AI & Data Intelligence",
+    template: "%s | Vertex Data Systems",
   },
   description:
     "We build production ML systems, autonomous AI agents, and real-time analytics infrastructure that give your organization an unfair, compounding advantage.",
@@ -38,22 +39,21 @@ export const metadata: Metadata = {
     "LLM engineering","computer vision","MLOps","data science",
     "NLP","enterprise AI","predictive analytics","AI security",
   ],
-  authors:  [{ name: "VertexData Systems" }],
-  creator:  "VertexData Systems",
+  authors:  [{ name: "Vertex Data Systems" }],
+  creator:  "Vertex Data Systems",
   openGraph: {
     type:        "website",
     locale:      "en_US",
     url:         "https://vertexdata.systems",
-    siteName:    "VertexData Systems",
-    title:       "VertexData Systems — Enterprise AI & Data Intelligence",
+    siteName:    "Vertex Data Systems",
+    title:       "Vertex Data Systems — Enterprise AI & Data Intelligence",
     description: "We turn raw data into decisive intelligence. Production ML, autonomous agents, and real-time BI.",
-    images: [{ url: "/images/og-image.png", width: 1200, height: 630, alt: "VertexData Systems" }],
+    images: [{ url: "/images/og-image.png", width: 1200, height: 630, alt: "Vertex Data Systems" }],
   },
   twitter: {
     card:        "summary_large_image",
-    title:       "VertexData Systems — Enterprise AI & Data Intelligence",
+    title:       "Vertex Data Systems — Enterprise AI & Data Intelligence",
     description: "Production ML, agentic AI, and data intelligence for enterprises.",
-    creator:     "@vertexdata",
     images:      ["/images/og-image.png"],
   },
   robots: {
@@ -61,6 +61,7 @@ export const metadata: Metadata = {
     follow:    true,
     googleBot: { index: true, follow: true, "max-video-preview": -1, "max-image-preview": "large", "max-snippet": -1 },
   },
+  alternates: { canonical: "/" },
   metadataBase: new URL("https://vertexdata.systems"),
 };
 
@@ -82,7 +83,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             __html: safeJsonLd({
               "@context": "https://schema.org",
               "@type":    "Organization",
-              name:        "VertexData Systems",
+              name:        "Vertex Data Systems",
               url:         "https://vertexdata.systems",
               description: "Enterprise AI and data intelligence agency.",
               contactPoint: { "@type": "ContactPoint", email: "hello@vertexdata.systems", contactType: "sales" },
@@ -98,6 +99,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
         {/* Ambient particle field — subtle, non-blocking, visible on all pages */}
         <ParticleCanvas count={60} opacity={0.35} />
+
+        {/* Custom cursor — desktop/fine-pointer only, no-ops itself out on touch and reduced-motion */}
+        <CustomCursor />
 
         {/* Navigation */}
         <Navbar />

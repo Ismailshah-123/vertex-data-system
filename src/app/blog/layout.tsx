@@ -5,7 +5,7 @@ export const metadata: Metadata = {
   description:
     "No thought leadership, no hot takes — hard-won engineering experience from building AI systems in production, written by the engineers who shipped them.",
   openGraph: {
-    title: "Blog — VertexData Systems",
+    title: "Blog — Vertex Data Systems",
     description: "Research and engineering notes from building AI systems in production.",
     url: "https://vertexdata.systems/blog",
   },

@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Privacy Policy",
-  description: "How VertexData Systems collects, uses, and protects your information.",
+  description: "How Vertex Data Systems collects, uses, and protects your information.",
   alternates: { canonical: "https://vertexdata.systems/privacy" },
 };
 

@@ -101,14 +101,24 @@ export class VertexNetworkSystem {
   private currentMode = 0;
   private time = 0;
   private animationFrameId: number | null = null;
-  private isVisible = true;
+  private isTabVisible = true;
+  private isInViewport = true;
+  private intersectionObserver: IntersectionObserver | null = null;
   private resizeObserver: ResizeObserver | null = null;
 
-  private onVisibilityChange = () => {
-    this.isVisible = document.visibilityState === "visible";
-    if (this.isVisible && this.animationFrameId === null && !this.reducedMotion) {
+  private get isRunnable(): boolean {
+    return this.isTabVisible && this.isInViewport;
+  }
+
+  private resumeIfNeeded = () => {
+    if (this.isRunnable && this.animationFrameId === null && !this.reducedMotion) {
       this.animationFrameId = requestAnimationFrame(this.animate);
     }
+  };
+
+  private onVisibilityChange = () => {
+    this.isTabVisible = document.visibilityState === "visible";
+    this.resumeIfNeeded();
   };
 
   constructor(
@@ -164,6 +174,22 @@ export class VertexNetworkSystem {
     this.updateTargetsForMode(this.currentMode);
 
     document.addEventListener("visibilitychange", this.onVisibilityChange);
+
+    if ("IntersectionObserver" in window) {
+      this.intersectionObserver = new IntersectionObserver(
+        ([entry]) => {
+          this.isInViewport = entry.isIntersecting;
+          if (!this.isInViewport && this.animationFrameId !== null) {
+            cancelAnimationFrame(this.animationFrameId);
+            this.animationFrameId = null;
+          } else {
+            this.resumeIfNeeded();
+          }
+        },
+        { threshold: 0 }
+      );
+      this.intersectionObserver.observe(this.container);
+    }
 
     if (this.reducedMotion) {
       this.renderStaticFrame();
@@ -381,7 +407,7 @@ export class VertexNetworkSystem {
   }
 
   private animate = () => {
-    if (!this.isVisible) { this.animationFrameId = null; return; }
+    if (!this.isRunnable) { this.animationFrameId = null; return; }
 
     this.time += 0.015;
     const positions = this.pGeom.attributes.position.array as Float32Array;
@@ -448,6 +474,7 @@ export class VertexNetworkSystem {
   public destroy() {
     if (this.animationFrameId) cancelAnimationFrame(this.animationFrameId);
     document.removeEventListener("visibilitychange", this.onVisibilityChange);
+    this.intersectionObserver?.disconnect();
     this.resizeObserver?.disconnect();
 
     this.pGeom.dispose();

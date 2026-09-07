@@ -124,7 +124,7 @@ export default function Footer() {
       <div className="border-t border-[#1e2b28] px-8 py-6">
         <div className="max-w-screen-xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="text-xs text-[#2a3d38]">
-            © 2026 VertexData Systems. All rights reserved.
+            © 2026 Vertex Data Systems. All rights reserved.
           </p>
           <div className="flex items-center gap-6">
             {[["Privacy Policy", "/privacy"], ["Terms of Service", "/terms"]].map(([label, href]) => (

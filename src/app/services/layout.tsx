@@ -5,7 +5,7 @@ export const metadata: Metadata = {
   description:
     "Ten disciplines, one unfair edge: data science, data engineering, analytics, ML engineering, MLOps, agentic AI, computer vision, LLM systems, AI security, and CRM automation — all built for production.",
   openGraph: {
-    title: "AI & Data Services — VertexData Systems",
+    title: "AI & Data Services — Vertex Data Systems",
     description: "Production-grade AI systems across ten disciplines, from data science foundations to CRM automation.",
     url: "https://vertexdata.systems/services",
   },

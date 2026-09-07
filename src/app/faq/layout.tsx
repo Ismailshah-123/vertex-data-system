@@ -5,7 +5,7 @@ export const metadata: Metadata = {
   description:
     "How fast can you deliver? Can our data stay private? Which models do you use? Straight answers to everything enterprise buyers ask before they engage.",
   openGraph: {
-    title: "FAQ — VertexData Systems",
+    title: "FAQ — Vertex Data Systems",
     description: "Straight answers, no sales spin, to everything you'd ask before signing.",
     url: "https://vertexdata.systems/faq",
   },

@@ -9,9 +9,9 @@ import { SERVICES, ORDER, type ServiceDetail } from "./data";
 /* ─────────────────────────────────────────────────────────────────────────
    /services/[slug]
    
-   Standalone page per service — matches DStarix's pattern where every
-   service ("Voice AI", "AI Chatbots", etc.) has its own URL and full
-   page, rather than living as a section on one long page.
+   Standalone page per service — every service ("Voice AI", "AI Chatbots",
+   etc.) gets its own URL and full page, rather than living as a section
+   on one long page.
 ───────────────────────────────────────────────────────────────────────── */
 
 
@@ -83,12 +83,19 @@ export default function ServiceDetailPage({ params }: { params: Promise<{ slug: 
           {/* Hero visual — real video once provided, themed CSS animation until then */}
           <div className="relative h-[260px] sm:h-[320px] lg:h-[400px]">
             {service.heroVideo && service.heroVideoPoster ? (
-              <CinematicVideo
-                src={service.heroVideo}
-                poster={service.heroVideoPoster}
-                label={`${service.title} in action`}
-                className="h-full"
-              />
+              <div className="relative h-full border border-[#1e2b28] bg-[#0a0c0b] p-3">
+                <span className="absolute top-0 left-0 w-4 h-4 border-t border-l border-[#00e5b4]/40" />
+                <span className="absolute top-0 right-0 w-4 h-4 border-t border-r border-[#00e5b4]/40" />
+                <span className="absolute bottom-0 left-0 w-4 h-4 border-b border-l border-[#00e5b4]/40" />
+                <span className="absolute bottom-0 right-0 w-4 h-4 border-b border-r border-[#00e5b4]/40" />
+                <CinematicVideo
+                  src={service.heroVideo}
+                  poster={service.heroVideoPoster}
+                  label={`${service.title} in action`}
+                  aspectClass="aspect-auto"
+                  className="h-full"
+                />
+              </div>
             ) : (
               <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
                 <div className="absolute w-40 h-40 rounded-full border animate-pulse" style={{ borderColor: `${ac}33` }} />

@@ -5,7 +5,7 @@ export const metadata: Metadata = {
   description:
     "Audit, Architect, Build, Harden, Deploy, Compound — the six-stage engagement flow that prevents AI projects from failing in production.",
   openGraph: {
-    title: "How VertexData Systems Works",
+    title: "How Vertex Data Systems Works",
     description: "A six-stage engagement process built to prevent the exact failures that kill most AI projects before they reach production.",
     url: "https://vertexdata.systems/process",
   },

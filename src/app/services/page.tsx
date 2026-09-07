@@ -508,12 +508,18 @@ export default function ServicesPage() {
 
       {/* ── CINEMATIC VISUAL: ENTERPRISE ARCHITECTURE ────────────────────── */}
       <section className="py-20 px-8 bg-[#0a0c0b]">
-        <div className="max-w-screen-xl mx-auto">
-          <CinematicVideo
-            src="/videos/enterprise-architecture.mp4"
-            poster="/videos/enterprise-architecture-poster.jpg"
-            label="Individual capabilities resolving into a single enterprise architecture"
-          />
+        <div className="max-w-screen-xl xl:max-w-[1600px] mx-auto">
+          <div className="relative border border-[#1e2b28] bg-[#0d0f0e] p-3">
+            <span className="absolute top-0 left-0 w-4 h-4 border-t border-l border-[#00e5b4]/40" />
+            <span className="absolute top-0 right-0 w-4 h-4 border-t border-r border-[#00e5b4]/40" />
+            <span className="absolute bottom-0 left-0 w-4 h-4 border-b border-l border-[#00e5b4]/40" />
+            <span className="absolute bottom-0 right-0 w-4 h-4 border-b border-r border-[#00e5b4]/40" />
+            <CinematicVideo
+              src="/videos/enterprise-architecture.mp4"
+              poster="/videos/enterprise-architecture-poster.jpg"
+              label="Individual capabilities resolving into a single enterprise architecture"
+            />
+          </div>
         </div>
       </section>
 

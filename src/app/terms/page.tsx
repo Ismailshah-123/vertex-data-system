@@ -14,7 +14,7 @@ const SECTIONS = [
   },
   {
     title: "2. Services",
-    body: `VertexData Systems provides AI and data engineering services, including CRM automation, data analytics, web development, RAG-based knowledge assistants, voice AI agents, ML engineering, agentic AI systems, computer vision, and NLP/LLM systems. Specific project scope, pricing, and deliverables are agreed separately in writing before any work begins — nothing on this website constitutes a binding offer or quote.`,
+    body: `Vertex Data Systems provides AI and data engineering services, including CRM automation, data analytics, web development, RAG-based knowledge assistants, voice AI agents, ML engineering, agentic AI systems, computer vision, and NLP/LLM systems. Specific project scope, pricing, and deliverables are agreed separately in writing before any work begins — nothing on this website constitutes a binding offer or quote.`,
   },
   {
     title: "3. No guaranteed outcomes",
@@ -22,7 +22,7 @@ const SECTIONS = [
   },
   {
     title: "4. Intellectual property",
-    body: `Content on this website (copy, design, logo) belongs to VertexData Systems. Code and deliverables from an actual client engagement are governed by that engagement's separate agreement — our standard approach is that you own what we build for you, source code included, as described on our services pages.`,
+    body: `Content on this website (copy, design, logo) belongs to Vertex Data Systems. Code and deliverables from an actual client engagement are governed by that engagement's separate agreement — our standard approach is that you own what we build for you, source code included, as described on our services pages.`,
   },
   {
     title: "5. Acceptable use",
@@ -34,7 +34,7 @@ const SECTIONS = [
   },
   {
     title: "7. Limitation of liability",
-    body: `To the extent permitted by law, VertexData Systems isn't liable for indirect or consequential damages arising from your use of this website. This doesn't limit liability that can't be excluded by law.`,
+    body: `To the extent permitted by law, Vertex Data Systems isn't liable for indirect or consequential damages arising from your use of this website. This doesn't limit liability that can't be excluded by law.`,
   },
   {
     title: "8. Changes to these terms",

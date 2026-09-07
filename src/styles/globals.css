@@ -148,3 +148,17 @@
     transition-duration: 0.01ms !important;
   }
 }
+
+/* ─── Custom cursor ──────────────────────────────────────────────────────────
+   Hides the native cursor while CustomCursor.tsx is mounted. Universal
+   selector + !important because many elements (links, buttons, anything
+   with a Tailwind cursor-pointer class) set an explicit `cursor` value of
+   their own, which would otherwise win over an inherited `cursor: none`
+   the moment the pointer moved over them. Only applied via the
+   .custom-cursor-active class the component adds itself — never touches
+   touch devices or reduced-motion users, since the component doesn't
+   mount (and so never adds the class) for either. */
+html.custom-cursor-active,
+html.custom-cursor-active * {
+  cursor: none !important;
+}

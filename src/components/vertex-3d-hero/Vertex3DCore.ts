@@ -50,10 +50,19 @@ export const ANIMATION_TIMELINE = {
   STABILIZATION_START: 8,
 };
 
-const TIER_CONFIG: Record<DeviceTier, { particleCount: number; cameraZ: number; cameraY: number; maxConnectionsPerParticle: number }> = {
-  mobile:  { particleCount: 160, cameraZ: 12, cameraY: 2, maxConnectionsPerParticle: 1 },
-  tablet:  { particleCount: 280, cameraZ: 9.5, cameraY: 1, maxConnectionsPerParticle: 2 },
-  desktop: { particleCount: 400, cameraZ: 8,  cameraY: 0, maxConnectionsPerParticle: 2 },
+const TIER_CONFIG: Record<DeviceTier, { particleCount: number; cameraZ: number; cameraY: number; fov: number; maxConnectionsPerParticle: number }> = {
+  // Mobile is untouched — same FOV/distance as before the desktop pass below.
+  mobile:  { particleCount: 160, cameraZ: 12,   cameraY: 2,   fov: 75, maxConnectionsPerParticle: 1 },
+  // Tablet gets a mild version of the desktop treatment.
+  tablet:  { particleCount: 280, cameraZ: 10.5, cameraY: 1.2, fov: 62, maxConnectionsPerParticle: 2 },
+  // Desktop: the V's own geometry is very shallow in Z (±0.4 units), so at
+  // the old 75°/z=8 combination — a wide near-field FOV — it read as a flat
+  // decal facing the camera. Narrowing the FOV and moving the camera back
+  // to compensate (same on-screen V size, less wide-angle stretch at the
+  // frame edges) plus raising the camera slightly off dead-center so it
+  // looks down onto the structure rather than straight at it are both pure
+  // framing changes — the V-shape formula and particle math are untouched.
+  desktop: { particleCount: 400, cameraZ: 13,   cameraY: 2.2, fov: 52, maxConnectionsPerParticle: 2 },
 };
 
 export function isWebGLAvailable(): boolean {
@@ -82,7 +91,9 @@ export class VertexSystem {
 
   private startTime: number | null = null;
   private animationFrameId: number | null = null;
-  private isVisible = true;
+  private isTabVisible = true;
+  private isInViewport = true;
+  private intersectionObserver: IntersectionObserver | null = null;
 
   private particleCount: number;
   private originalPositions!: Float32Array;
@@ -90,11 +101,19 @@ export class VertexSystem {
   private connectionPairs: [number, number][] = [];
   private lineBuffer!: Float32Array;
 
-  private onVisibilityChange = () => {
-    this.isVisible = document.visibilityState === "visible";
-    if (this.isVisible && this.animationFrameId === null && !this.reducedMotion) {
+  private get isRunnable(): boolean {
+    return this.isTabVisible && this.isInViewport;
+  }
+
+  private resumeIfNeeded = () => {
+    if (this.isRunnable && this.animationFrameId === null && !this.reducedMotion) {
       this.animationFrameId = requestAnimationFrame(this.animate);
     }
+  };
+
+  private onVisibilityChange = () => {
+    this.isTabVisible = document.visibilityState === "visible";
+    this.resumeIfNeeded();
   };
 
   constructor(container: HTMLElement, deviceType: DeviceTier = "desktop", reducedMotion = false) {
@@ -113,7 +132,7 @@ export class VertexSystem {
     const height = this.container.clientHeight || window.innerHeight;
 
     this.scene = new THREE.Scene();
-    this.camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
+    this.camera = new THREE.PerspectiveCamera(TIER_CONFIG[this.deviceType].fov, width / height, 0.1, 1000);
     this.renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
 
     this.renderer.setSize(width, height);
@@ -126,6 +145,22 @@ export class VertexSystem {
     this.setupCamera();
 
     document.addEventListener("visibilitychange", this.onVisibilityChange);
+
+    if ("IntersectionObserver" in window) {
+      this.intersectionObserver = new IntersectionObserver(
+        ([entry]) => {
+          this.isInViewport = entry.isIntersecting;
+          if (!this.isInViewport && this.animationFrameId !== null) {
+            cancelAnimationFrame(this.animationFrameId);
+            this.animationFrameId = null;
+          } else {
+            this.resumeIfNeeded();
+          }
+        },
+        { threshold: 0 }
+      );
+      this.intersectionObserver.observe(this.container);
+    }
 
     if (this.reducedMotion) {
       this.renderStaticConvergedFrame();
@@ -260,7 +295,7 @@ export class VertexSystem {
   }
 
   private animate = () => {
-    if (!this.isVisible) { this.animationFrameId = null; return; } // paused while tab hidden
+    if (!this.isRunnable) { this.animationFrameId = null; return; } // paused while hidden or off-screen
 
     this.startTime = this.startTime || Date.now();
     const elapsed = (Date.now() - this.startTime) / 1000;
@@ -290,6 +325,13 @@ export class VertexSystem {
 
     // Ambient Camera Parallax
     this.camera.position.x += (Math.sin(elapsed * 0.1) * 0.2 - this.camera.position.x) * 0.02;
+    if (this.deviceType !== "mobile") {
+      // Very subtle vertical drift around the tier's fixed tilt — kept tiny
+      // on purpose (well under a degree of visual angle) so the scene reads
+      // as "alive" rather than as a camera that's visibly moving.
+      const targetY = TIER_CONFIG[this.deviceType].cameraY + Math.sin(elapsed * 0.08) * 0.12;
+      this.camera.position.y += (targetY - this.camera.position.y) * 0.02;
+    }
     this.camera.lookAt(0, 0, 0);
 
     this.renderer.render(this.scene, this.camera);
@@ -299,6 +341,7 @@ export class VertexSystem {
   public destroy() {
     if (this.animationFrameId) cancelAnimationFrame(this.animationFrameId);
     document.removeEventListener("visibilitychange", this.onVisibilityChange);
+    this.intersectionObserver?.disconnect();
     this.renderer.dispose();
     this.geometry.dispose();
     this.pointsMaterial.dispose();

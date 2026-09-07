@@ -228,12 +228,18 @@ export default function ProcessPage() {
 
       {/* ── CINEMATIC VISUAL ──────────────────────────────────────────── */}
       <section className="px-8 pb-20">
-        <div className="max-w-screen-xl mx-auto">
-          <CinematicVideo
-            src="/videos/process-page.mp4"
-            poster="/videos/process-page-poster.jpg"
-            label="Independent modules organizing into one coordinated system"
-          />
+        <div className="max-w-screen-xl xl:max-w-[1600px] mx-auto">
+          <div className="relative border border-[#1e2b28] bg-[#0d0f0e] p-3">
+            <span className="absolute top-0 left-0 w-4 h-4 border-t border-l border-[#00e5b4]/40" />
+            <span className="absolute top-0 right-0 w-4 h-4 border-t border-r border-[#00e5b4]/40" />
+            <span className="absolute bottom-0 left-0 w-4 h-4 border-b border-l border-[#00e5b4]/40" />
+            <span className="absolute bottom-0 right-0 w-4 h-4 border-b border-r border-[#00e5b4]/40" />
+            <CinematicVideo
+              src="/videos/process-page.mp4"
+              poster="/videos/process-page-poster.jpg"
+              label="Independent modules organizing into one coordinated system"
+            />
+          </div>
         </div>
       </section>
 

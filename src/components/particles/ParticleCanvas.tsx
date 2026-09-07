@@ -23,8 +23,11 @@ export default function ParticleCanvas({
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
     let W = 0, H = 0, raf = 0;
     let mx = -9999, my = -9999;
+    let isTabVisible = true;
 
     const resize = () => {
       W = canvas!.width  = window.innerWidth;
@@ -51,7 +54,7 @@ export default function ParticleCanvas({
     const onMouseMove = (e: MouseEvent) => { mx = e.clientX; my = e.clientY; };
     document.addEventListener("mousemove", onMouseMove);
 
-    function draw() {
+    function drawFrame() {
       ctx!.clearRect(0, 0, W, H);
       particles.forEach(p => {
         // Repel from mouse
@@ -86,14 +89,31 @@ export default function ParticleCanvas({
           }
         }
       }
+    }
+
+    function draw() {
+      if (!isTabVisible) { raf = 0; return; } // paused while tab hidden
+      drawFrame();
       raf = requestAnimationFrame(draw);
     }
-    draw();
+
+    const onVisibilityChange = () => {
+      isTabVisible = document.visibilityState === "visible";
+      if (isTabVisible && raf === 0 && !reducedMotion) raf = requestAnimationFrame(draw);
+    };
+    document.addEventListener("visibilitychange", onVisibilityChange);
+
+    if (reducedMotion) {
+      drawFrame(); // single static frame, no loop
+    } else {
+      draw();
+    }
 
     return () => {
       cancelAnimationFrame(raf);
       window.removeEventListener("resize", resize);
       document.removeEventListener("mousemove", onMouseMove);
+      document.removeEventListener("visibilitychange", onVisibilityChange);
     };
   }, [count, connectDistance]);
 
@@ -102,6 +122,7 @@ export default function ParticleCanvas({
       ref={canvasRef}
       className={`fixed inset-0 w-full h-full pointer-events-none z-0 ${className}`}
       style={{ opacity }}
+      aria-hidden="true"
     />
   );
 }

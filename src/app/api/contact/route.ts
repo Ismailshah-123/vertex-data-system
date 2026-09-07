@@ -191,7 +191,7 @@ export async function POST(req: NextRequest) {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        from: "VertexData Systems <onboarding@resend.dev>", // change once your domain is verified
+        from: "Vertex Data Systems <onboarding@resend.dev>", // change once your domain is verified
         to: [CONTACT_EMAIL],
         reply_to: email,
         subject: `New inquiry: ${company} — ${service}`,

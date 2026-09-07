@@ -16,7 +16,7 @@ import Link from "next/link";
 const SECTIONS = [
   {
     title: "1. Who we are",
-    body: `VertexData Systems ("we," "us," "our") provides AI and data engineering services. This policy explains what information we collect through this website, why, and what you can do about it.`,
+    body: `Vertex Data Systems ("we," "us," "our") provides AI and data engineering services. This policy explains what information we collect through this website, why, and what you can do about it.`,
   },
   {
     title: "2. Information we collect",

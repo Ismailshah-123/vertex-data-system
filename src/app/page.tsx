@@ -255,7 +255,7 @@ export default function Home() {
         <div className="absolute inset-0 bg-[linear-gradient(rgba(0,229,180,0.025)_1px,transparent_1px),linear-gradient(90deg,rgba(0,229,180,0.025)_1px,transparent_1px)] bg-[size:56px_56px] [mask-image:radial-gradient(ellipse_75%_75%_at_35%_45%,black,transparent)]" />
         <div className="absolute top-1/3 left-1/4 w-[600px] h-[600px] bg-[radial-gradient(circle,rgba(0,229,180,0.06)_0%,transparent_70%)] animate-pulse pointer-events-none" />
 
-        <div className="max-w-screen-xl mx-auto w-full grid md:grid-cols-[1.15fr_0.85fr] gap-16 items-center relative">
+        <div className="max-w-screen-xl xl:max-w-[1600px] mx-auto w-full grid md:grid-cols-[1fr_1fr] gap-16 items-center relative">
           <motion.div
             ref={heroTextRef}
             initial="hidden"
@@ -319,7 +319,7 @@ export default function Home() {
 
           {/* Vertex Intelligent Architecture — 3D */}
           <motion.div
-            className="w-full aspect-square max-w-[520px] mx-auto md:mx-0"
+            className="w-full aspect-square lg:aspect-[4/3] max-w-[520px] md:max-w-[820px] mx-auto md:mx-0"
             initial={reduceMotion ? { opacity: 0 } : { opacity: 0, scale: 0.92 }}
             animate={reduceMotion ? { opacity: 1 } : { opacity: 1, scale: 1 }}
             transition={reduceMotion ? { duration: 0.01 } : { type: "spring", stiffness: 80, damping: 16, delay: 0.5 }}
@@ -478,7 +478,7 @@ export default function Home() {
       {/* ── CINEMATIC VISUAL: SYSTEM FLOW ────────────────────────────────── */}
       <section className="bg-[#0d0f0e] py-24 md:py-32 px-8 border-t border-[#1e2b28] relative overflow-hidden">
         <div className="absolute inset-0 bg-[linear-gradient(rgba(0,229,180,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(0,229,180,0.02)_1px,transparent_1px)] bg-[size:48px_48px] pointer-events-none" />
-        <div className="max-w-screen-xl mx-auto grid md:grid-cols-[0.85fr_1.15fr] gap-12 md:gap-16 items-center relative">
+        <div className="max-w-screen-xl xl:max-w-[1600px] mx-auto grid md:grid-cols-[0.85fr_1.15fr] gap-12 md:gap-16 items-center relative">
           {/* Copy */}
           <Reveal>
             <div className="relative pl-6 border-l border-[#1e2b28]">

@@ -5,7 +5,7 @@ export const metadata: Metadata = {
   description:
     "Claude, GPT-4, Llama, LangGraph, Pinecone, Kubernetes and more — the full technology ecosystem we reach for, and exactly when we use each tool.",
   openGraph: {
-    title: "Our Technology Ecosystem — VertexData Systems",
+    title: "Our Technology Ecosystem — Vertex Data Systems",
     description: "Model-agnostic, reasoning-first. Every tool we use, and exactly when we reach for it.",
     url: "https://vertexdata.systems/stack",
   },

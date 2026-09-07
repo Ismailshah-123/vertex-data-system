@@ -2,13 +2,19 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import dynamic from "next/dynamic";
+
+const VertexTransformationVisual = dynamic(
+  () => import("@/components/vertex-3d-transformation/VertexTransformationVisual").then(m => m.VertexTransformationVisual),
+  { ssr: false, loading: () => null }
+);
 
 /* ─────────────────────────────────────────────────────────────────────────
    /case-studies
 
    IMPORTANT — read before editing this file:
    This page shows REAL independent/prototype projects, not client work.
-   VertexData doesn't have paying clients yet. Every entry here is either
+   Vertex Data Systems doesn't have paying clients yet. Every entry here is either
    (a) a genuine project Ismail built and can speak to in detail, clearly
    labeled with its actual status ("Independent project", "Prototype",
    "In development", "Deployed"), or (b) an explicitly labeled CONCEPT —
@@ -75,7 +81,7 @@ const PROJECTS = [
 const CONCEPT = {
   category: "Concept · Proposed Architecture",
   title: "Automated Lead Qualification & Cold Outreach Engine",
-  note: "This is a concept, not a completed or deployed project — included because CRM automation is VertexData's primary focus, and this is the reference architecture we'd actually build.",
+  note: "This is a concept, not a completed or deployed project — included because CRM automation is Vertex Data Systems' primary focus, and this is the reference architecture we'd actually build.",
   problem: "Sales teams lose momentum between a lead coming in and a rep actually calling them — manual qualification and cold-outreach sequencing eats the hours that matter most.",
   approach: "An AI layer sitting on top of an existing CRM (HubSpot/Salesforce) that scores incoming leads, drafts and sequences cold email/call outreach, and books qualified meetings directly onto a rep's calendar — with a human review queue before anything goes out at scale.",
   stack: ["HubSpot/Salesforce API", "Twilio", "n8n", "Claude", "GPT-4"],
@@ -104,8 +110,18 @@ export default function CaseStudiesPage() {
   return (
     <main className="bg-[#0a0c0b] text-[#f0f5f3] min-h-screen">
       {/* ── HERO ──────────────────────────────────────────────────────── */}
-      <section className="pt-36 pb-20 px-8">
-        <div className="max-w-3xl mx-auto">
+      <section className="relative pt-36 pb-20 px-8 overflow-hidden">
+        {/* 3D transformation engine — ambient backdrop, behind all text content */}
+        <div className="absolute inset-0 opacity-60">
+          <VertexTransformationVisual />
+        </div>
+        {/* Grid */}
+        <div className="absolute inset-0 bg-[linear-gradient(rgba(0,229,180,0.025)_1px,transparent_1px),linear-gradient(90deg,rgba(0,229,180,0.025)_1px,transparent_1px)] bg-[size:64px_64px] [mask-image:radial-gradient(ellipse_75%_75%_at_50%_40%,black,transparent)] pointer-events-none" />
+        {/* Glow */}
+        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px]
+          bg-[radial-gradient(circle,rgba(0,229,180,0.05)_0%,transparent_70%)] pointer-events-none animate-pulse" />
+
+        <div className="max-w-3xl mx-auto relative z-10">
           <Reveal><p className="text-[#00e5b4] text-xs tracking-[0.2em] uppercase mb-4 font-semibold">Proof of Work</p></Reveal>
           <Reveal delay={80}>
             <h1 className="text-[clamp(2.2rem,5vw,4.5rem)] font-black tracking-tight leading-[1.02] mb-6">
@@ -114,7 +130,7 @@ export default function CaseStudiesPage() {
           </Reveal>
           <Reveal delay={140}>
             <p className="text-[#5a7570] text-lg leading-relaxed">
-              VertexData doesn't have client case studies yet — we're a new company. What we do have is real, independent engineering work: production-style systems built end to end, not tutorials followed to completion. Every status label below is accurate. Nothing here is a client engagement.
+              Vertex Data Systems doesn't have client case studies yet — we're a new company. What we do have is real, independent engineering work: production-style systems built end to end, not tutorials followed to completion. Every status label below is accurate. Nothing here is a client engagement.
             </p>
           </Reveal>
         </div>

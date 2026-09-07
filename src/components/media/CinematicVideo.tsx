@@ -24,9 +24,10 @@ interface Props {
   poster: string;
   label: string;       // accessible label — these videos have no audio track/captions to describe them otherwise
   className?: string;
+  aspectClass?: string; // default "aspect-video" (16:9, width-driven). Pass "aspect-auto" when the parent already sets an explicit height and should drive sizing instead.
 }
 
-export default function CinematicVideo({ src, poster, label, className = "" }: Props) {
+export default function CinematicVideo({ src, poster, label, className = "", aspectClass = "aspect-video" }: Props) {
   const wrapRef  = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const [shouldLoad, setShouldLoad] = useState(false);
@@ -57,7 +58,7 @@ export default function CinematicVideo({ src, poster, label, className = "" }: P
   return (
     <div
       ref={wrapRef}
-      className={`relative w-full aspect-video rounded-2xl overflow-hidden border border-[#1e2b28]
+      className={`relative w-full ${aspectClass} rounded-2xl overflow-hidden border border-[#1e2b28]
         bg-[#0d0f0e] transition-all duration-1000 ${visible ? "opacity-100 scale-100" : "opacity-0 scale-[0.98]"} ${className}`}
     >
       {/* Poster — always rendered underneath; the only thing shown at all for reduced-motion users */}

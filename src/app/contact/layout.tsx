@@ -5,7 +5,7 @@ export const metadata: Metadata = {
   description:
     "No 30-slide deck, no automated qualification. A real engineer reads every submission and replies within 24 hours with an honest assessment.",
   openGraph: {
-    title: "Contact — VertexData Systems",
+    title: "Contact — Vertex Data Systems",
     description: "Tell us what you're building. A senior engineer replies within 24 hours.",
     url: "https://vertexdata.systems/contact",
   },
