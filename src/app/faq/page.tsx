@@ -150,7 +150,7 @@ export default function FAQPage() {
               ))}
               <div className="mt-8 pt-8 border-t border-[#1e2b28]">
                 <p className="text-xs text-[#3a5550] mb-4">Still have questions?</p>
-                <Link href="/contact" className="text-sm font-semibold text-[#00e5b4] hover:underline">
+                <Link href="/contact" className="text-sm font-semibold text-[#00e5b4] link-underline">
                   Talk to us directly →
                 </Link>
               </div>

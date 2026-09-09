@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import VertexLogo from "@/components/logo/VertexLogo";
+import Magnetic from "@/components/ui/Magnetic";
 
 const NAV_LINKS = [
   {
@@ -22,8 +23,22 @@ const NAV_LINKS = [
     ],
   },
   { label: "Process",      href: "/process",      mega: null },
+  { label: "Projects",     href: "/projects",     mega: null },
   { label: "Case Studies", href: "/case-studies", mega: null },
   { label: "About",        href: "/about",        mega: null },
+];
+
+// Secondary pages — real routes that exist on the site but don't warrant
+// a full top-level nav slot. Surfaced in the mobile menu's second tier
+// (desktop already covers these via the footer and the command palette).
+const SECONDARY_LINKS = [
+  { label: "Tech Stack", href: "/stack"     },
+  { label: "Clients",    href: "/clients"   },
+  { label: "Blog",       href: "/blog"      },
+  { label: "FAQ",        href: "/faq"       },
+  { label: "Resources",  href: "/resources" },
+  { label: "Careers",    href: "/careers"   },
+  { label: "Contact",    href: "/contact"   },
 ];
 
 export default function Navbar() {
@@ -132,26 +147,45 @@ export default function Navbar() {
 
           {/* Right CTAs */}
           <div className="hidden lg:flex items-center gap-4">
-            <Link href="/projects" className="text-sm text-[#5a7570] hover:text-[#00e5b4] transition-colors">
-              Explore our work
-            </Link>
-            <Link href="/#contact"
-              className="text-sm font-bold bg-[#00e5b4] text-black px-5 py-2.5 rounded-lg
-                hover:bg-white hover:shadow-[0_0_30px_rgba(0,229,180,0.5)] transition-all duration-300">
-              Book a call →
-            </Link>
+            <button
+              onClick={() => window.dispatchEvent(new CustomEvent("vertex:open-command-palette"))}
+              className="flex items-center gap-2 text-sm text-[#5a7570] hover:text-[#00e5b4] border border-[#1e2b28] hover:border-[#00e5b4]/40 rounded-lg px-3 py-2 transition-colors duration-200"
+              aria-label="Open command palette"
+            >
+              <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <circle cx="11" cy="11" r="8" /><path d="m21 21-4.3-4.3" />
+              </svg>
+              <kbd className="text-[10px] font-mono">⌘K</kbd>
+            </button>
+            <Magnetic>
+              <Link href="/#contact"
+                className="text-sm font-bold bg-[#00e5b4] text-black px-5 py-2.5 rounded-lg
+                  hover:bg-white hover:shadow-[0_0_30px_rgba(0,229,180,0.5)] transition-all duration-300">
+                Book a call →
+              </Link>
+            </Magnetic>
           </div>
 
-          {/* Hamburger */}
-          <button onClick={() => setMobileOpen(v => !v)}
-            aria-label={mobileOpen ? "Close menu" : "Open menu"}
-            aria-expanded={mobileOpen}
-            aria-controls="mobile-nav-menu"
-            className="lg:hidden flex flex-col gap-1.5 items-center justify-center w-11 h-11 -mr-1.5">
-            <span className={`block h-px w-6 bg-[#00e5b4] transition-all duration-300 ${mobileOpen ? "rotate-45 translate-y-2" : ""}`} />
-            <span className={`block h-px w-6 bg-[#00e5b4] transition-all duration-300 ${mobileOpen ? "opacity-0" : ""}`} />
-            <span className={`block h-px w-6 bg-[#00e5b4] transition-all duration-300 ${mobileOpen ? "-rotate-45 -translate-y-2" : ""}`} />
-          </button>
+          {/* Mobile search trigger + hamburger */}
+          <div className="lg:hidden flex items-center gap-1">
+            <button
+              onClick={() => window.dispatchEvent(new CustomEvent("vertex:open-command-palette"))}
+              aria-label="Search"
+              className="flex items-center justify-center w-11 h-11 text-[#5a7570] hover:text-[#00e5b4] transition-colors">
+              <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <circle cx="11" cy="11" r="8" /><path d="m21 21-4.3-4.3" />
+              </svg>
+            </button>
+            <button onClick={() => setMobileOpen(v => !v)}
+              aria-label={mobileOpen ? "Close menu" : "Open menu"}
+              aria-expanded={mobileOpen}
+              aria-controls="mobile-nav-menu"
+              className="flex flex-col gap-1.5 items-center justify-center w-11 h-11 -mr-1.5">
+              <span className={`block h-px w-6 bg-[#00e5b4] transition-all duration-300 ${mobileOpen ? "rotate-45 translate-y-2" : ""}`} />
+              <span className={`block h-px w-6 bg-[#00e5b4] transition-all duration-300 ${mobileOpen ? "opacity-0" : ""}`} />
+              <span className={`block h-px w-6 bg-[#00e5b4] transition-all duration-300 ${mobileOpen ? "-rotate-45 -translate-y-2" : ""}`} />
+            </button>
+          </div>
         </div>
       </nav>
 
@@ -159,7 +193,7 @@ export default function Navbar() {
       <div id="mobile-nav-menu" className={`fixed inset-0 z-[45] bg-[#0a0c0b] transition-all duration-500 flex flex-col pt-28 px-8
         ${mobileOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"}`}
         aria-hidden={!mobileOpen}>
-        <div className="flex flex-col gap-1">
+        <div className="flex flex-col gap-1 overflow-y-auto">
           {NAV_LINKS.map((link, i) => {
             const active = isActive(link.href);
             return (
@@ -172,10 +206,21 @@ export default function Navbar() {
               </Link>
             );
           })}
+
+          <div className="flex flex-wrap gap-x-6 gap-y-1 pt-6">
+            {SECONDARY_LINKS.map((link, i) => (
+              <Link key={link.label} href={link.href}
+                onClick={() => setMobileOpen(false)}
+                className="text-base text-[#5a7570] hover:text-[#00e5b4] transition-colors py-1.5"
+                style={{ transitionDelay: mobileOpen ? `${(NAV_LINKS.length + i) * 70}ms` : "0ms" }}>
+                {link.label}
+              </Link>
+            ))}
+          </div>
         </div>
-        <div className="mt-auto pb-16">
+        <div className="mt-auto pb-16 pt-8">
           <Link href="/#contact" onClick={() => setMobileOpen(false)}
-            className="block w-full text-center font-bold bg-[#00e5b4] text-black py-4 rounded-xl text-lg mt-8">
+            className="block w-full text-center font-bold bg-[#00e5b4] text-black py-4 rounded-xl text-lg">
             Book a call →
           </Link>
         </div>

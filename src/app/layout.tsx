@@ -6,6 +6,8 @@ import Footer          from "@/components/footer/Footer";
 import ParticleCanvas  from "@/components/particles/ParticleCanvas";
 import ScrollProgress  from "@/components/scroll-progress/ScrollProgress";
 import CustomCursor    from "@/components/ui/CustomCursor";
+import PageTransition  from "@/components/transitions/PageTransition";
+import CommandPalette  from "@/components/command-palette/CommandPalette";
 import { safeJsonLd } from "@/lib/safeJsonLd";
 
 // Display font — used for all headings (h1/h2/h3). A confident grotesque
@@ -100,17 +102,23 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         {/* Ambient particle field — subtle, non-blocking, visible on all pages */}
         <ParticleCanvas count={60} opacity={0.35} />
 
+        {/* Film-grain texture — already defined in globals.css, wasn't mounted anywhere */}
+        <div className="noise-overlay" aria-hidden="true" />
+
         {/* Custom cursor — desktop/fine-pointer only, no-ops itself out on touch and reduced-motion */}
         <CustomCursor />
 
         {/* Navigation */}
         <Navbar />
 
-        {/* Page content injected by Next.js — renders immediately, no intro gate */}
-        {children}
+        {/* Page content injected by Next.js — animates between routes; nav/footer stay put */}
+        <PageTransition>{children}</PageTransition>
 
         {/* Footer */}
         <Footer />
+
+        {/* Command palette — Cmd/Ctrl+K, all pages */}
+        <CommandPalette />
 
         {/* Scroll progress indicator — fixed overlay, all pages */}
         <ScrollProgress />

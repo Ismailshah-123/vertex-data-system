@@ -3,6 +3,8 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import dynamic from "next/dynamic";
+import { CASE_STUDIES } from "./data";
+import SpotlightCard from "@/components/ui/SpotlightCard";
 
 const VertexTransformationVisual = dynamic(
   () => import("@/components/vertex-3d-transformation/VertexTransformationVisual").then(m => m.VertexTransformationVisual),
@@ -27,66 +29,26 @@ const VertexTransformationVisual = dynamic(
    than blending them in with these.
 ───────────────────────────────────────────────────────────────────────── */
 
-const PROJECTS = [
+const CONCEPTS = [
   {
-    id: "voice-agent-platform",
-    status: "Independent project",
-    category: "Voice AI · Multi-Tenant SaaS",
-    title: "AI Voice Agent Platform",
-    problem: "Most AI phone agent demos are single-tenant proofs of concept — they don't handle multiple businesses, real billing, or the reliability bar a paying customer would actually need.",
-    approach: "Built a multi-tenant SaaS platform letting businesses across 11+ industries deploy AI phone agents — RAG-based knowledge retrieval so answers are grounded in each business's own information, automated appointment booking, and WhatsApp/email confirmations.",
-    stack: ["FastAPI", "PostgreSQL", "Vapi", "Groq", "Stripe", "Pytest"],
-    features: ["Multi-tenant architecture", "RAG knowledge retrieval", "Automated booking + confirmations", "Stripe billing integration", "35+ test Pytest suite"],
-    outcome: "A working platform architecture — not just a call demo — proving multi-tenant voice AI deployment with the billing and test coverage a real product needs.",
-    color: "#00e5b4",
+    category: "Concept · Proposed Architecture",
+    title: "Automated Lead Qualification & Cold Outreach Engine",
+    note: "This is a concept, not a completed or deployed project — included because CRM automation is Vertex Data Systems' primary focus, and this is the reference architecture we'd actually build.",
+    problem: "Sales teams lose momentum between a lead coming in and a rep actually calling them — manual qualification and cold-outreach sequencing eats the hours that matter most.",
+    approach: "An AI layer sitting on top of an existing CRM (HubSpot/Salesforce) that scores incoming leads, drafts and sequences cold email/call outreach, and books qualified meetings directly onto a rep's calendar — with a human review queue before anything goes out at scale.",
+    stack: ["HubSpot/Salesforce API", "Twilio", "n8n", "Claude", "GPT-4"],
+    expectedOutcome: "Faster lead response time and more rep hours spent talking to qualified prospects instead of triaging a list by hand.",
   },
   {
-    id: "ai-interviewer",
-    status: "Deployed",
-    category: "Voice AI · HR Tech",
-    title: "AI Interviewer",
-    problem: "Screening interviews are time-consuming and inconsistent between candidates when done manually at volume.",
-    approach: "Built an end-to-end AI interview platform: analyzes an uploaded resume, conducts a live voice interview over WebRTC, and generates a structured hiring evaluation within minutes of the call ending.",
-    stack: ["FastAPI", "PostgreSQL", "Streamlit", "Vapi", "WebRTC"],
-    features: ["Resume analysis", "Live voice interview via WebRTC", "Structured evaluation generation", "Deployed on Render"],
-    outcome: "A live, deployed system — not a mockup — demonstrating real-time voice AI paired with structured decision-support output.",
-    color: "#00d19e",
-  },
-  {
-    id: "career-gpt",
-    status: "In active development",
-    category: "Agentic AI · Automation",
-    title: "AI Job Hunter (CareerGPT)",
-    problem: "Job searching is fragmented across separate steps — finding roles, tailoring a resume for each one, and building outreach content — that most tools handle in isolation, if at all.",
-    approach: "A 9-agent system automating job discovery, resume tailoring by role, and LinkedIn content generation, built with a multi-provider fallback chain so no single LLM outage stops the pipeline.",
-    stack: ["FastAPI", "PostgreSQL", "Redis", "Qdrant", "Groq", "Claude", "GPT-4", "Gemini"],
-    features: ["9-agent orchestration", "Role-specific resume tailoring", "Vector search via Qdrant", "Multi-provider LLM fallback chain"],
-    outcome: "Demonstrates production-grade multi-agent orchestration with real reliability engineering — not a single-LLM wrapper.",
-    color: "#00bcd4",
-  },
-  {
-    id: "cancer-detection",
-    status: "Proof of concept",
-    category: "Computer Vision · Healthcare AI",
-    title: "Multi-Cancer Detection System",
-    problem: "Early detection across different cancer types usually requires organ-specific imaging expertise that isn't uniformly available.",
-    approach: "A deep learning platform with 9 independently trained CNN models (ResNet50, EfficientNet) for organ-specific cancer classification, including brain and lung, with an image upload interface that identifies the cancer type and localizes the affected region.",
-    stack: ["Python", "TensorFlow/PyTorch", "ResNet50", "EfficientNet"],
-    features: ["9 independently trained CNN models", "Organ-specific classification", "Region localization on the image", "Clinical-report-style output"],
-    outcome: "Demonstrates computer vision capability across multiple specialized classification tasks with a genuinely usable output format, not just a single-class demo.",
-    color: "#b000e5",
+    category: "Concept · Proposed Architecture",
+    title: "Agentic Support Automation",
+    note: "This is a concept, not a completed or deployed project — included because agentic support automation is one of our core service offerings, and this is the reference architecture we'd actually build.",
+    problem: "Most \"AI support\" is a chatbot that deflects to a human the moment a ticket gets non-trivial — teams end up triaging the hard cases manually anyway, with an extra layer in between.",
+    approach: "A three-tier agent architecture — triage, resolver, and escalation — integrated directly with an existing helpdesk (Zendesk, Intercom), with a guardrails layer for PII protection and sentiment-based escalation, run in shadow mode against real ticket volume for three weeks before any customer-facing rollout, then phased in gradually.",
+    stack: ["LangGraph", "Claude API", "Guardrails AI", "Zendesk API"],
+    expectedOutcome: "The large majority of ticket volume resolved autonomously, with clean escalation on the rest — not another chatbot that deflects the moment something's non-trivial.",
   },
 ];
-
-const CONCEPT = {
-  category: "Concept · Proposed Architecture",
-  title: "Automated Lead Qualification & Cold Outreach Engine",
-  note: "This is a concept, not a completed or deployed project — included because CRM automation is Vertex Data Systems' primary focus, and this is the reference architecture we'd actually build.",
-  problem: "Sales teams lose momentum between a lead coming in and a rep actually calling them — manual qualification and cold-outreach sequencing eats the hours that matter most.",
-  approach: "An AI layer sitting on top of an existing CRM (HubSpot/Salesforce) that scores incoming leads, drafts and sequences cold email/call outreach, and books qualified meetings directly onto a rep's calendar — with a human review queue before anything goes out at scale.",
-  stack: ["HubSpot/Salesforce API", "Twilio", "n8n", "Claude", "GPT-4"],
-  expectedOutcome: "Faster lead response time and more rep hours spent talking to qualified prospects instead of triaging a list by hand.",
-};
 
 function Reveal({ children, delay = 0, className = "" }: { children: React.ReactNode; delay?: number; className?: string }) {
   const ref = useRef<HTMLDivElement>(null);
@@ -139,9 +101,9 @@ export default function CaseStudiesPage() {
       {/* ── PROJECTS ──────────────────────────────────────────────────── */}
       <section className="px-8 pb-8">
         <div className="max-w-screen-xl mx-auto space-y-6">
-          {PROJECTS.map((p, i) => (
+          {CASE_STUDIES.map((p, i) => (
             <Reveal key={p.id} delay={i * 60}>
-              <div className="border border-[#1e2b28] rounded-2xl p-8 md:p-10 hover:border-[#2a3d38] transition-colors duration-300">
+              <SpotlightCard as="a" href={`/case-studies/${p.id}`} className="block p-8 md:p-10">
                 <div className="flex flex-wrap items-center gap-3 mb-5">
                   <span className="text-[10px] tracking-[0.15em] uppercase font-semibold px-3 py-1 rounded-full border" style={{ color: p.color, borderColor: `${p.color}44` }}>
                     {p.status}
@@ -182,39 +144,45 @@ export default function CaseStudiesPage() {
                     ))}
                   </div>
                 </div>
-              </div>
+                <p className="text-xs font-semibold text-[#00e5b4] mt-6 flex items-center gap-1.5">
+                  Read the full case study
+                  <span className="inline-block transition-transform group-hover:translate-x-1">→</span>
+                </p>
+              </SpotlightCard>
             </Reveal>
           ))}
         </div>
       </section>
 
-      {/* ── CONCEPT SCENARIO ──────────────────────────────────────────── */}
+      {/* ── CONCEPT SCENARIOS ─────────────────────────────────────────── */}
       <section className="px-8 py-20 border-t border-[#1e2b28] bg-[#0d0f0e]">
-        <div className="max-w-screen-xl mx-auto">
-          <Reveal><p className="text-[#3a5550] text-xs tracking-[0.2em] uppercase mb-4 font-semibold">Concept — Not a Completed Project</p></Reveal>
-          <Reveal delay={60}>
-            <div className="border border-dashed border-[#2a3d38] rounded-2xl p-8 md:p-10">
-              <p className="text-xs text-[#5a7570] italic mb-6">{CONCEPT.note}</p>
-              <p className="text-[10px] tracking-[0.15em] uppercase text-[#3a5550] mb-2">{CONCEPT.category}</p>
-              <h2 className="text-2xl md:text-3xl font-black tracking-tight mb-6">{CONCEPT.title}</h2>
-              <div className="grid md:grid-cols-2 gap-8 mb-6">
-                <div>
-                  <p className="text-[10px] tracking-[0.15em] uppercase text-[#3a5550] mb-2">The problem</p>
-                  <p className="text-sm text-[#8aa39e] leading-relaxed">{CONCEPT.problem}</p>
+        <div className="max-w-screen-xl mx-auto space-y-6">
+          <Reveal><p className="text-[#3a5550] text-xs tracking-[0.2em] uppercase mb-4 font-semibold">Concepts — Not Completed Projects</p></Reveal>
+          {CONCEPTS.map((c, i) => (
+            <Reveal key={c.title} delay={i * 60}>
+              <div className="border border-dashed border-[#2a3d38] rounded-2xl p-8 md:p-10">
+                <p className="text-xs text-[#5a7570] italic mb-6">{c.note}</p>
+                <p className="text-[10px] tracking-[0.15em] uppercase text-[#3a5550] mb-2">{c.category}</p>
+                <h2 className="text-2xl md:text-3xl font-black tracking-tight mb-6">{c.title}</h2>
+                <div className="grid md:grid-cols-2 gap-8 mb-6">
+                  <div>
+                    <p className="text-[10px] tracking-[0.15em] uppercase text-[#3a5550] mb-2">The problem</p>
+                    <p className="text-sm text-[#8aa39e] leading-relaxed">{c.problem}</p>
+                  </div>
+                  <div>
+                    <p className="text-[10px] tracking-[0.15em] uppercase text-[#3a5550] mb-2">The proposed approach</p>
+                    <p className="text-sm text-[#8aa39e] leading-relaxed">{c.approach}</p>
+                  </div>
                 </div>
-                <div>
-                  <p className="text-[10px] tracking-[0.15em] uppercase text-[#3a5550] mb-2">The proposed approach</p>
-                  <p className="text-sm text-[#8aa39e] leading-relaxed">{CONCEPT.approach}</p>
+                <div className="flex flex-wrap items-center justify-between gap-4 pt-6 border-t border-[#1e2b28]">
+                  <p className="text-sm text-[#00e5b4]">{c.expectedOutcome}</p>
+                  <div className="flex flex-wrap gap-1.5">
+                    {c.stack.map(s => (<span key={s} className="text-[10px] font-mono text-[#3a5550]">{s}</span>))}
+                  </div>
                 </div>
               </div>
-              <div className="flex flex-wrap items-center justify-between gap-4 pt-6 border-t border-[#1e2b28]">
-                <p className="text-sm text-[#00e5b4]">{CONCEPT.expectedOutcome}</p>
-                <div className="flex flex-wrap gap-1.5">
-                  {CONCEPT.stack.map(s => (<span key={s} className="text-[10px] font-mono text-[#3a5550]">{s}</span>))}
-                </div>
-              </div>
-            </div>
-          </Reveal>
+            </Reveal>
+          ))}
         </div>
       </section>
 

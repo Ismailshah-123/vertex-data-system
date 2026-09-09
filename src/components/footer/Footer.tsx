@@ -3,6 +3,8 @@
 import Link from "next/link";
 import { useReveal } from "@/hooks";
 import VertexLogo from "@/components/logo/VertexLogo";
+import SystemsStatus from "@/components/footer/SystemsStatus";
+import Magnetic from "@/components/ui/Magnetic";
 
 const COLS = [
   {
@@ -66,19 +68,23 @@ export default function Footer() {
           </h2>
           <div className={`flex items-center justify-center gap-4 flex-wrap
             transition-all duration-700 delay-200 ${visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}>
-            <Link href="/#contact"
-              className="inline-flex items-center gap-2 bg-[#00e5b4] text-black font-bold
-                px-8 py-4 rounded-xl text-base hover:bg-white hover:shadow-[0_0_60px_rgba(0,229,180,0.5)]
-                transition-all duration-300">
-              Book a discovery call
-              <span className="text-lg">→</span>
-            </Link>
-            <Link href="/projects"
-              className="inline-flex items-center gap-2 border border-[#2a3d38] text-white
-                font-semibold px-8 py-4 rounded-xl text-base hover:border-[#00e5b4] hover:text-[#00e5b4]
-                transition-all duration-300">
-              Explore our work
-            </Link>
+            <Magnetic>
+              <Link href="/#contact"
+                className="inline-flex items-center gap-2 bg-[#00e5b4] text-black font-bold
+                  px-8 py-4 rounded-xl text-base hover:bg-white hover:shadow-[0_0_60px_rgba(0,229,180,0.5)]
+                  transition-all duration-300">
+                Book a discovery call
+                <span className="text-lg">→</span>
+              </Link>
+            </Magnetic>
+            <Magnetic>
+              <Link href="/projects"
+                className="inline-flex items-center gap-2 border border-[#2a3d38] text-white
+                  font-semibold px-8 py-4 rounded-xl text-base hover:border-[#00e5b4] hover:text-[#00e5b4]
+                  transition-all duration-300">
+                Explore our work
+              </Link>
+            </Magnetic>
           </div>
         </div>
       </div>
@@ -126,6 +132,7 @@ export default function Footer() {
           <p className="text-xs text-[#2a3d38]">
             © 2026 Vertex Data Systems. All rights reserved.
           </p>
+          <SystemsStatus />
           <div className="flex items-center gap-6">
             {[["Privacy Policy", "/privacy"], ["Terms of Service", "/terms"]].map(([label, href]) => (
               <Link key={label} href={href}

@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import SpotlightCard from "@/components/ui/SpotlightCard";
 
 /* ─────────────────────────────────────────────────────────────────────────
    /projects — the orderable catalog.
@@ -130,9 +131,9 @@ function ProjectCard({ p, index }: { p: typeof PROJECTS[0]; index: number }) {
     <div ref={ref} className={`transition-all duration-700 ${vis ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"}`}
       style={{ transitionDelay: `${index * 60}ms` }}
       onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}>
-      <Link href={`/projects/${p.slug}`}
-        className={`group block bg-[#0d0f0e] border border-[#1e2b28] rounded-2xl p-7 h-full
-          transition-all duration-400 ${hovered ? "-translate-y-1 border-[#2a3d38] shadow-[0_24px_70px_rgba(0,0,0,0.4)]" : ""}`}>
+      <SpotlightCard as="a" href={`/projects/${p.slug}`}
+        className={`block p-7 h-full
+          transition-all duration-400 ${hovered ? "-translate-y-1 !border-[#2a3d38] shadow-[0_24px_70px_rgba(0,0,0,0.4)]" : ""}`}>
         <div className={`h-px w-full mb-6 transition-all duration-500 ${hovered ? "opacity-100" : "opacity-0"}`}
           style={{ background: `linear-gradient(90deg, transparent, ${p.color}, transparent)` }} />
         <div className="flex items-center justify-between mb-5">
@@ -156,7 +157,7 @@ function ProjectCard({ p, index }: { p: typeof PROJECTS[0]; index: number }) {
             View & request →
           </div>
         </div>
-      </Link>
+      </SpotlightCard>
     </div>
   );
 }

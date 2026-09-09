@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
 import CinematicVideo from "@/components/media/CinematicVideo";
+import Magnetic from "@/components/ui/Magnetic";
 import dynamic from "next/dynamic";
 
 const VertexIntelligentArchitecture = dynamic(
@@ -178,35 +179,6 @@ function Counter({ value }: { value: string }) {
   return <span ref={ref as React.RefObject<HTMLSpanElement>}>{display}</span>;
 }
 
-function MagneticBtn({ children, className = "", href }: { children: React.ReactNode; className?: string; href?: string }) {
-  const ref = useRef<HTMLAnchorElement & HTMLButtonElement>(null);
-  const onMove = (e: React.MouseEvent) => {
-    if (!ref.current) return;
-    const r = ref.current.getBoundingClientRect();
-    const x = (e.clientX - r.left - r.width / 2) / r.width;
-    const y = (e.clientY - r.top - r.height / 2) / r.height;
-    ref.current.style.transform = `translate(${x * 10}px, ${y * 6}px)`;
-  };
-  const onLeave = () => { if (ref.current) ref.current.style.transform = "translate(0,0)"; };
-
-  if (href) {
-    return (
-      <Link href={href} ref={ref as React.Ref<HTMLAnchorElement>}
-        className={`transition-transform duration-200 inline-block ${className}`}
-        onMouseMove={onMove} onMouseLeave={onLeave}>
-        {children}
-      </Link>
-    );
-  }
-  return (
-    <button ref={ref as React.Ref<HTMLButtonElement>}
-      className={`transition-transform duration-200 inline-block ${className}`}
-      onMouseMove={onMove} onMouseLeave={onLeave}>
-      {children}
-    </button>
-  );
-}
-
 function FAQItem({ q, a }: { q: string; a: string }) {
   const [open, setOpen] = useState(false);
   return (
@@ -302,18 +274,22 @@ export default function Home() {
               variants={heroItemVariants}
               transition={heroItemTransition}
             >
-              <motion.div whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.97 }} transition={{ type: "spring", stiffness: 400, damping: 15 }}>
-                <Link href="/contact" className="inline-block bg-[#00e5b4] text-black font-bold px-7 py-3.5 rounded-xl text-sm
-                  hover:bg-white hover:shadow-[0_0_50px_rgba(0,229,180,0.4)] transition-[background-color,box-shadow] duration-300">
-                  Start a project →
-                </Link>
-              </motion.div>
-              <motion.div whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.97 }} transition={{ type: "spring", stiffness: 400, damping: 15 }}>
-                <Link href="/projects" className="inline-block border border-[#2a3d38] text-white font-semibold px-7 py-3.5 rounded-xl text-sm
-                  hover:border-[#00e5b4] hover:text-[#00e5b4] transition-colors duration-300">
-                  See our work
-                </Link>
-              </motion.div>
+              <Magnetic>
+                <motion.div whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.97 }} transition={{ type: "spring", stiffness: 400, damping: 15 }}>
+                  <Link href="/contact" className="inline-block bg-[#00e5b4] text-black font-bold px-7 py-3.5 rounded-xl text-sm
+                    hover:bg-white hover:shadow-[0_0_50px_rgba(0,229,180,0.4)] transition-[background-color,box-shadow] duration-300">
+                    Start a project →
+                  </Link>
+                </motion.div>
+              </Magnetic>
+              <Magnetic>
+                <motion.div whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.97 }} transition={{ type: "spring", stiffness: 400, damping: 15 }}>
+                  <Link href="/projects" className="inline-block border border-[#2a3d38] text-white font-semibold px-7 py-3.5 rounded-xl text-sm
+                    hover:border-[#00e5b4] hover:text-[#00e5b4] transition-colors duration-300">
+                    See our work
+                  </Link>
+                </motion.div>
+              </Magnetic>
             </motion.div>
           </motion.div>
 
@@ -493,12 +469,14 @@ export default function Home() {
               <p className="text-[#8aada8] text-base leading-relaxed mb-8 max-w-md">
                 Most organizations don't have a data problem — they have a dozen disconnected systems that were never designed to talk to each other. This is the same pipeline architecture behind every project on this site: ingestion, normalization, and routing, built to hold up once it's actually carrying production traffic.
               </p>
-              <Link href="/process"
-                className="inline-flex items-center gap-2 border border-[#2a3d38] text-white font-semibold px-6 py-3.5 rounded-xl text-sm
-                  hover:border-[#00e5b4] hover:text-[#00e5b4] transition-colors duration-300 group">
-                See how it's built
-                <span className="group-hover:translate-x-1 transition-transform duration-200">→</span>
-              </Link>
+              <Magnetic>
+                <Link href="/process"
+                  className="inline-flex items-center gap-2 border border-[#2a3d38] text-white font-semibold px-6 py-3.5 rounded-xl text-sm
+                    hover:border-[#00e5b4] hover:text-[#00e5b4] transition-colors duration-300 group">
+                  See how it's built
+                  <span className="group-hover:translate-x-1 transition-transform duration-200">→</span>
+                </Link>
+              </Magnetic>
             </div>
           </Reveal>
 
@@ -627,7 +605,7 @@ export default function Home() {
                     ))}
                   </div>
 
-                  <Link href="/clients" className="mt-auto inline-flex items-center gap-1.5 text-xs font-semibold text-[#00e5b4] hover:underline">
+                  <Link href="/clients" className="mt-auto inline-flex items-center gap-1.5 text-xs font-semibold text-[#00e5b4] link-underline">
                     Explore {ind.name} →
                   </Link>
                 </div>
@@ -728,7 +706,7 @@ export default function Home() {
             </Reveal>
             <Reveal delay={140}>
               <p className="text-sm text-[#5a7570] mb-4">Everything enterprise buyers ask before they engage.</p>
-              <Link href="/faq" className="text-sm font-semibold text-[#00e5b4] hover:underline">
+              <Link href="/faq" className="text-sm font-semibold text-[#00e5b4] link-underline">
                 Still curious? See all FAQs →
               </Link>
             </Reveal>
@@ -757,14 +735,18 @@ export default function Home() {
           </Reveal>
           <Reveal delay={200}>
             <div className="flex items-center justify-center gap-4 flex-wrap">
-              <MagneticBtn href="/contact" className="bg-[#00e5b4] text-black font-bold px-8 py-4 rounded-xl text-sm
-                hover:bg-white hover:shadow-[0_0_50px_rgba(0,229,180,0.4)] transition-all duration-300">
-                Start a project →
-              </MagneticBtn>
-              <MagneticBtn href="/case-studies" className="border border-[#2a3d38] text-white font-semibold px-8 py-4 rounded-xl text-sm
-                hover:border-[#00e5b4] hover:text-[#00e5b4] transition-all duration-300">
-                See what we've built
-              </MagneticBtn>
+              <Magnetic>
+                <Link href="/contact" className="inline-block bg-[#00e5b4] text-black font-bold px-8 py-4 rounded-xl text-sm
+                  hover:bg-white hover:shadow-[0_0_50px_rgba(0,229,180,0.4)] transition-all duration-300">
+                  Start a project →
+                </Link>
+              </Magnetic>
+              <Magnetic>
+                <Link href="/case-studies" className="inline-block border border-[#2a3d38] text-white font-semibold px-8 py-4 rounded-xl text-sm
+                  hover:border-[#00e5b4] hover:text-[#00e5b4] transition-all duration-300">
+                  See what we've built
+                </Link>
+              </Magnetic>
             </div>
           </Reveal>
         </div>

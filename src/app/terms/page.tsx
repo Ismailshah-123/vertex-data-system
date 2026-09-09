@@ -75,7 +75,7 @@ export default function TermsPage() {
           ))}
 
           <div className="pt-8 border-t border-[#1e2b28]">
-            <Link href="/privacy" className="text-sm text-[#00e5b4] hover:underline">
+            <Link href="/privacy" className="text-sm text-[#00e5b4] link-underline">
               Read our Privacy Policy →
             </Link>
           </div>

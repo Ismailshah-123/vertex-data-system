@@ -2,6 +2,7 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { POSTS } from "./posts";
+import SpotlightCard from "@/components/ui/SpotlightCard";
 
 const CATEGORIES = ["All", "Agentic AI", "LLM Engineering", "Data Architecture", "AI Security", "MLOps", "Computer Vision"];
 
@@ -100,9 +101,9 @@ function PostCard({ post, index, featured = false }: { post: typeof POSTS[0]; in
     <div ref={ref} className={`transition-all duration-700 ${vis ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
       style={{ transitionDelay: `${index * 80}ms` }}
       onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}>
-      <Link href={`/blog/${post.slug}`}
-        className={`block bg-[#0d0f0e] border border-[#1e2b28] rounded-2xl p-6
-          transition-all duration-400 ${hovered ? "-translate-y-1 border-[#2a3d38] shadow-[0_20px_60px_rgba(0,0,0,0.4)]" : ""}`}>
+      <SpotlightCard as="a" href={`/blog/${post.slug}`}
+        className={`block p-6
+          transition-all duration-400 ${hovered ? "-translate-y-1 !border-[#2a3d38] shadow-[0_20px_60px_rgba(0,0,0,0.4)]" : ""}`}>
         {/* Top bar */}
         <div className={`h-px w-full mb-6 transition-all duration-500 ${hovered ? "opacity-100" : "opacity-0"}`}
           style={{ background: `linear-gradient(90deg, transparent, ${post.accentColor}, transparent)` }} />
@@ -125,7 +126,7 @@ function PostCard({ post, index, featured = false }: { post: typeof POSTS[0]; in
           </div>
           <span className={`text-xs transition-all duration-300 ${hovered ? "text-[#00e5b4] translate-x-1" : "text-[#2a3d38]"}`}>→</span>
         </div>
-      </Link>
+      </SpotlightCard>
     </div>
   );
 }

@@ -276,3 +276,153 @@ Verified with a full `tsc --noEmit` pass and another complete production
 build (all 45 routes) after these changes, same font-stub-and-revert
 method as the initial pass (see §8) — reverted and diffed clean
 afterward.
+
+---
+
+## 11. Premium interaction pass — page transitions, command palette, magnetic CTAs, systems status
+
+Four additions, all built on what's already in the project (framer-motion
+was already a dependency, no new packages added):
+
+- **Page transitions** (`components/transitions/PageTransition.tsx`) —
+  route content now fades/lifts between pages instead of hard-cutting,
+  keyed on pathname via `AnimatePresence`. Nav and footer stay outside
+  the transition wrapper so they don't re-animate on every navigation —
+  only the content between them does. Uses framer-motion's own
+  `useReducedMotion()` to collapse to an instant swap for reduced-motion
+  users.
+- **Command palette** (`components/command-palette/CommandPalette.tsx`) —
+  Cmd/Ctrl+K opens a searchable, grouped list of every real route on the
+  site (13 pages, 9 services, 8 projects, 6 blog posts — all real titles
+  and paths pulled from the actual data files, not placeholders). Also
+  reachable by clicking the ⌘K button in the desktop nav, since a
+  keyboard-only feature nobody discovers isn't much of a feature.
+  Keyboard nav (arrows/enter/escape), focus restored to whatever was
+  focused before opening, body scroll locked while open.
+- **Magnetic CTAs** (`components/ui/Magnetic.tsx`) — found that the
+  homepage already had a local, one-off `MagneticBtn` doing a simpler
+  version of this (raw CSS transform, no reduced-motion handling at all).
+  Replaced it with a shared, spring-based version (framer-motion
+  `useMotionValue`/`useSpring`) that does respect reduced-motion, and
+  applied it consistently to the site's primary CTAs: the nav's "Book a
+  call," both footer CTAs, the homepage hero buttons, "See how it's
+  built," and the homepage's closing CTA pair (which is what the old
+  local component was doing already — now on the shared, more capable
+  version instead of a duplicate implementation).
+- **Systems status** (`components/footer/SystemsStatus.tsx`) — a pulsing
+  dot and a live UTC clock in the footer's bottom bar. Deliberately not a
+  fabricated metric (no invented uptime percentage or "systems
+  monitored" count) — the clock is real, current time, nothing claimed
+  that isn't true by construction.
+
+Verified with a full `tsc --noEmit` pass and another complete production
+build (all 45 routes) after these changes, reverted/diffed clean same as
+every prior pass.
+
+**Worth a manual look**: the new ⌘K trigger button sits in the desktop
+nav's CTA row alongside the existing two items — I can't visually confirm
+spacing/wrapping at every viewport from here. Also worth a quick check:
+pages that link to `/#contact` from a different route (nav/footer "Book a
+call") now go through the page-transition delay before the hash-scroll
+happens — should still work since Next.js's hash handling runs after
+mount, but I don't have a live browser to confirm the timing feels right.
+
+---
+
+## 12. Navbar pass — IA fix, mobile parity
+
+- **Projects promoted into the main nav.** It's now a peer of Services/
+  Process/Case Studies/About instead of a small text link ("Explore our
+  work") tucked into the CTA row — that link is gone now, replaced by the
+  real nav slot. Order: Services → Process → Projects → Case Studies →
+  About, following the natural "what we do → how → what you can buy →
+  proof it works → who we are" flow.
+- **Command palette now reachable on mobile.** Previously Cmd/Ctrl+K was
+  the only way in, which doesn't exist without a physical keyboard. Added
+  a search icon next to the hamburger that dispatches the same open event
+  the desktop button already uses — no duplicated logic.
+- **Mobile menu second tier.** Stack, Clients, Blog, FAQ, Resources,
+  Careers, and Contact — seven real pages that were previously only
+  reachable by scrolling to the footer — now show as a smaller, quieter
+  list below the five primary links. Added `overflow-y-auto` to the
+  mobile menu container too, since it now holds meaningfully more content
+  than before and shouldn't clip on shorter viewports.
+
+Verified with `tsc --noEmit` and another full production build (45/45
+routes) afterward, reverted/diffed clean same as every prior pass.
+
+---
+
+## 13. Turning on dormant polish + two accessibility gaps
+
+- **`.noise-overlay` was fully built in `globals.css` and never mounted
+  anywhere** — fixed film-grain texture, correct opacity/blend-mode,
+  zero usages in any page. Added one `<div className="noise-overlay" />`
+  to the root layout. Site-wide, zero design risk — the decision to add
+  this texture was already made by whoever wrote the CSS, it just never
+  got wired in.
+- **Same story with `SpotlightCard.tsx`** — cursor-tracked spotlight glow
+  for cards, fully built, zero usages anywhere in `src/app`. Applied it
+  to the Projects grid and the Blog grid (the two actual card-grid
+  layouts on the site — `/services` turned out to be a full-width
+  alternating layout, not a card grid, so it wasn't a fit there).
+  Layered on top of, not replacing, each card's existing hover state
+  (lift, border, accent line) — the two effects are complementary.
+- **Added `:focus-visible` styling** — an emerald outline, 2px, offset by
+  3px. `:focus-visible` (not `:focus`) only triggers for keyboard
+  navigation, not mouse clicks, so it doesn't add visual noise for the
+  far more common mouse/touch interaction. Nothing on the site had a
+  custom focus state before this — every element fell back to the
+  browser's own default outline, which looked out of place against the
+  palette and is also a real (not just cosmetic) accessibility gap.
+- **Added `.link-underline`, an animated draw-in underline utility**, and
+  applied it to the site's five genuinely inline body-copy text links
+  (homepage → Clients, homepage → FAQ, Terms ↔ Privacy cross-links, FAQ →
+  Contact) that were using instant `hover:underline` before. Left button-
+  style and nav-menu links exactly as they were — this utility is scoped
+  to inline text links specifically, not applied globally.
+
+Verified with `tsc --noEmit` and another full production build (45/45
+routes), reverted/diffed clean same as every prior pass.
+
+**Declined**: fabricated client testimonials. Explained the reasoning
+in-conversation rather than here — short version is that it directly
+contradicts the honesty positioning already live on the case-studies
+page, and presenting invented client statements as real is a legal
+problem in most places, not just a design one.
+
+---
+
+## 14. Fixed the recurring `case-studies/[slug]` build failure
+
+`src/app/case-studies/[slug]/page.tsx` was never part of any zip I
+worked from and was never shared with me directly despite being asked
+for three times across this session — so rather than leave the build
+permanently blocked, I rebuilt it from scratch using the real case-study
+data that already existed on the listing page, following the exact
+pattern already established by `/projects/[slug]` and `/services/[slug]`.
+
+- **New: `case-studies/data.ts`** — the four real case studies (AI Voice
+  Agent Platform, AI Interviewer, CareerGPT, Multi-Cancer Detection),
+  extracted verbatim from the listing page, now a single shared source.
+  An explicit `CaseStudy` interface is declared first and the array is
+  typed against it — not the reversed order (`typeof ARRAY[number]`)
+  that caused the original circular-reference error.
+- **New: `case-studies/[slug]/page.tsx` + `layout.tsx`** — a detail page
+  per case study. Portfolio-style rather than the order-form pattern
+  `/projects/[slug]` uses, since these are things already built, not
+  packages you can commission — no pricing sidebar, no request form.
+  Metadata/canonical/generateStaticParams follow the same pattern as the
+  other two `[slug]` routes.
+- **Listing page cards are now actually clickable** — previously the
+  case-studies cards were static display blocks with nowhere to go.
+  Wrapped in `SpotlightCard` (consistent with the Projects/Blog grids)
+  linking to each detail page, with a "Read the full case study →"
+  affordance now that there's somewhere to go.
+- Added the 4 new URLs to `sitemap.ts` (imported directly from the new
+  data module rather than a hand-maintained slug list) and to the
+  command palette's Case Studies group.
+
+Confirmed by running the *exact* build command that was failing
+(`npm run build`, full TypeScript pass included) — now completes with
+49/49 routes, including all four new case-study detail pages.

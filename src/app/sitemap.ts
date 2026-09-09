@@ -1,5 +1,6 @@
 import { MetadataRoute } from "next";
 import { POSTS } from "./blog/posts";
+import { CASE_STUDIES } from "./case-studies/data";
 
 /* ─────────────────────────────────────────────────────────────────────────
    Next.js auto-generates /sitemap.xml from this file — no manual XML,
@@ -75,5 +76,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.6,
   }));
 
-  return [...staticEntries, ...serviceEntries, ...projectEntries, ...blogEntries];
+  const caseStudyEntries: MetadataRoute.Sitemap = CASE_STUDIES.map(cs => ({
+    url: `${BASE_URL}/case-studies/${cs.id}`,
+    lastModified: new Date(),
+    changeFrequency: "monthly",
+    priority: 0.7,
+  }));
+
+  return [...staticEntries, ...serviceEntries, ...projectEntries, ...blogEntries, ...caseStudyEntries];
 }
